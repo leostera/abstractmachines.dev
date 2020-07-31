@@ -1,0 +1,70 @@
+h1 {
+  margin-bottom: 6rem;
+}
+
+nav {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+div.brand {
+  display: flex;
+  align-items: center;
+}
+
+div.brand span {
+  margin-left: 1rem;
+}
+
+blockquote {
+  padding: 3rem;
+  margin: 3rem 0;
+  background-color: #0c8996;
+  color: #f8f8f8;
+  font-weight: 400;
+}
+
+h1 + blockquote {
+  margin-top: 0;
+}
+
+blockquote h2 {
+  border-bottom: 8px solid #FC144F;
+  background-color: #0c8996;
+}
+
+li p {
+  margin: 0;
+  padding: 0;
+  display: inline-block;
+}
+
+p {
+  margin: 0;
+  line-height: 1.5rem;
+}
+
+p + p {
+  margin-top: 1rem;
+}
+
+p + h2 {
+  margin-top: 3rem;
+}
+
+pre + p {
+  margin-top: 1.5rem;
+}
+
+pre code {
+  border-radius: 2px;
+}
+
+h3 {
+  width: fit-content;
+  margin-bottom: 0;
+  font-weight: 700;
+  border-bottom: 8px solid #FC144F;
+}
