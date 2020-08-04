@@ -78,12 +78,18 @@
                 <li> AM001 &mdash; <a href="/posts/am001-data-languages.html"> Data Language </a> </li> 
                 <li> AM000 &mdash; <a href="/posts/am000-hello-world.html"> hello world </a> </li> 
             </ul>
-            <p> Subscribe to our newsletter to get these right in your inbox </p>
-            <iframe
-              scrolling="no"
-              style="width:100%!important;height:220px;border:1px #ccc solid !important"
-              src="https://buttondown.email/abstractmachines?as_embed=true"
-              ></iframe>
+            <h4> Newsletter </h4>
+            <form
+              action="https://buttondown.email/api/emails/embed-subscribe/abstractmachines"
+              method="post"
+              target="popupwindow"
+              onsubmit="window.open('https://buttondown.email/abstractmachines', 'popupwindow')"
+              class="buttondown"
+              >
+              <input type="email" name="email" placeholder="hello@example.com" id="bd-email">
+              <input type="hidden" value="1" name="embed"></input>
+              <input type="submit" value="Subscribe"></input>
+            </form>
           </section>
         </section>
 

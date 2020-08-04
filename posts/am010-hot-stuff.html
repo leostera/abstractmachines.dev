@@ -73,15 +73,23 @@
       </section>
       <section class="center">
         <section class="content">
-          <h2> Join our Newsletter </h2>
+          <h4> Newsletter </h4>
           <p>
-          Hi! Glad to see you made it this far. If you enjoyed the cnotent, you can get this and more stuff right in your inbox. Just punch your email in the form below and I'll take care of the rest.
+          Hello! Glad to see you made it this far. You can get this and more stuff
+          right in your inbox. Just punch your email in the form below and I'll
+          take care of the rest.
           </p>
-          <iframe
-            scrolling="no"
-            style="width:100%!important;height:220px;border:1px #ccc solid !important"
-            src="https://buttondown.email/abstractmachines?as_embed=true"
-            ></iframe>
+          <form
+            action="https://buttondown.email/api/emails/embed-subscribe/abstractmachines"
+            method="post"
+            target="popupwindow"
+            onsubmit="window.open('https://buttondown.email/abstractmachines', 'popupwindow')"
+            class="buttondown"
+            >
+            <input type="email" name="email" placeholder="hello@example.com" id="bd-email">
+            <input type="hidden" value="1" name="embed"></input>
+            <input type="submit" value="Subscribe"></input>
+          </form>
         </section>
       </section>
       <footer>
