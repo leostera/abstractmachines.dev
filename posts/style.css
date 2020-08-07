@@ -34,6 +34,11 @@ blockquote {
   font-weight: 400;
 }
 
+blockquote a {
+  padding: 0.1rem 0.1rem;
+  border-bottom-color: #f8f8f8;
+}
+
 h1 + blockquote {
   margin-top: 0;
 }

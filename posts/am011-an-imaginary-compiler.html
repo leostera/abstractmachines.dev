@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+    <meta name="title" content="Abstract Machines | An Imaginary Compiler">
+    <meta name="description" content="Abstract Machines makes tools to think clearly.">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Abstract Machines | An Imaginary Compiler ">
+    <meta property="og:description" content="Abstract Machines makes tools to think clearly.">
+    <meta property="og:image" content="https://abstractmachines.dev/assets/socialmedia.png">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:title" content="Abstract Machines | An Imaginary Compiler ">
+    <meta property="twitter:description" content="Abstract Machines makes tools to think clearly.">
+    <meta property="twitter:image" content="https://abstractmachines.dev/assets/socialmedia.png">
+
+    <title>Abstract Machines | An Imaginary Compiler </title>
+
+    <link rel="preload" href="/global.css" as="style">
+    <link rel="preload" href="/posts/style.css" as="style">
+    <link rel="stylesheet" href="/global.css">
+    <link rel="stylesheet" href="/posts/style.css">
+
+    <link href="https://unpkg.com/prismjs@1.20.0/themes/prism.css" rel="stylesheet" />
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-65775908-6"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-65775908-6');
+    </script>
+  </head>
+  <body>
+    <div class="container">
+      <section class="center">
+        <section class="content">
+          <nav>
+            <a class="img" href="/" alt="Abstract Machines Home">
+              <div class="brand">
+                <img class="isotype super-tiny" src="/assets/Isotype_inverted.png" alt="Abstract Machines Logo"/>
+                <span>Abstract Machines</span>
+              </div>
+            </a>
+            <div>
+              <a class="icon" href="https://github.com/AbstractMachinesLab">
+                <img src="/assets/github.png" alt="Github Logo"/>
+              </a>
+              <a class="icon" href="https://patreon.com/AbstractMachines">
+                <img style="margin-top: 2px" src="/assets/patreon.png" alt="Patreon Logo"/>
+              </a>
+            </div>
+          </nav>
+        </section>
+      </section>
+      <section class="center">
+        <section class="content">
+          <h2>AM011</h2>
+<h1>An Imaginary Compiler</h1>
+<blockquote>
+<h2>Heads up!</h2>
+<p>This is a short story exploring technical blogging as narrative non-fiction.
+It reads like a tale, and while it aims to entertain and be relatable, it
+attempts to expose a set of underlying technical points.</p>
+</blockquote>
+<p>A file somewhere feels its bits munged around, as our programmer saves it.</p>
+<p>&quot;ERROR!&quot;, yells the terminal output again. Eyes roll. What was it this time?
+They wondered. Did I pass in the wrong variable? Was it the wrong property
+name?</p>
+<p>&quot;Silly me&quot;, mutters the programmer. It was indeed a typo. &quot;'email', not
+'emial'&quot;.</p>
+<p>You see, this programmer had been learning to code using an old <em>statically
+typed</em> language, so they were still not used to computers yelling out loud
+&quot;you're making mistakes&quot; this fast, this often, and often even showing how to
+fix the mistakes. But as programmers do, this one was picking up pace. Today a
+few lines, tomorrow a few modules.</p>
+<p>Quickly they learned that these things, &quot;types&quot;, don't <em>just</em> mix very well
+unless you're very explicit about it. That everything needs to have the right
+name. That sometimes you make modules that deal with a &quot;thing&quot;, and you hide
+what that thing is from everyone else.</p>
+<p>We say &quot;let everyone in on...&quot;, but we really mean that if some code was a
+person and some other was another person, these people would share some
+information.</p>
+<p>As time passed, our coder grew fond of this imaginary companion that would yell
+at them on every turn, letting them discover the wondrous world of computing
+through their fascinating, buggy programs.</p>
+<h4>First Job</h4>
+<p>HR sent the email that morning, announcing our programmer they would be joining
+a new company! Excitement. On a team that used a modern <em>dynamically typed</em>
+language. Doubt.</p>
+<p>&quot;How is it possible&quot;, our protagonist wondered, &quot;that the compiler doesn't know
+what things are? Bytes flowing out of control throughout the controls of the
+program without anyone knowing what was what at any point in time? Madness&quot;</p>
+<p>Our programmer, you see, was used to defining what things were upfront. In this
+new project, there seemed to be no way to do this that was well accepted. In
+fact, this language seemed to have a split community of users that couldn't
+even agree with each other on whether they liked this unstructured,
+metamorphing data in the first place!</p>
+<p>Some, bent to the will of the language, moved bytes in the hopes that they will
+be what they should, aggressively checking everywhere before using them.</p>
+<p>Others insisted in using something gimmick of the language that <em>looked like a
+type</em> but wasn't quite the same. It was a trick, played to give you the sense
+of security.</p>
+<p>And our programmer struggled to find their place in this world, without their
+imaginary companion showing them how it could be better.</p>
+<h4>Amalgamating</h4>
+<p>One, and then two tests printed yes. A third test goes red. Now the first one
+is broken. &quot;Ughhhh why is it so hard to refactor this f*cking thing&quot;, someone
+complained on the back.</p>
+<p>A chair turns around, and rolls over, offering help. It seems that someone
+changed the underlying structure of one of these objects, and while there was
+no tests that proved it was broken, production code was failing.</p>
+<p>&quot;I mean I get it, we're not making a class for this, since we are functional
+programmers or whatever but wouldn't it be nice if we had a single definition
+of what this thing looks like&quot;, argued the complainer pointing at a stacktrace.
+It was ridden with irrelevant details, but if you squinted, you maybe would
+find that they had tried to access some data that no longer resided inside of
+the object. &quot;I'd love it we could catch these things earlier on&quot;.</p>
+<p>Long ago our coder used to work with a companion that would complain very early
+on, very often, and very loudly. Long ago they used to write one module per
+&quot;thing&quot;, whatever that thing was. Sometimes creating a &quot;thing&quot; meant it must
+have passed certain requirements, so the rest of the code wouldn't need to
+check for these things later on. But that was a long time ago.</p>
+<p>And our programmer, wondering why not just make a module for this thing,
+shared:</p>
+<p>&quot;I mean, sure, we don't quite have a compiler complaining at us on every new
+line we write, but I've noticed it does complain about <em>some things</em>...</p>
+<p>So hear me out, what if we just make a new module with functions to both
+create, but also access and alter this thing.&quot;</p>
+<p>&quot;Ugh more code?&quot;, the complaining continued.</p>
+<p>&quot;Yeah so instead of just passing that data around, you would be forced to use
+this module, and then if we need to change something like a name of one of its
+properties, then the function names will change and the compiler will complain
+about that. I mean it can't tell the property name has changed, but it can tell
+that the function name has, right?&quot;, our programmer proposed, sketching
+pseudocode.</p>
+<pre><code class="language-erlang">module(OurThing) {
+  %% fields: A, B, C
+
+  fun create(a, b, c) {
+    %% check if they're good
+  }
+
+  fun a(thing) { thing[0] }
+  fun with_a(thing, newA) { {...thing, 0: newA} }
+
+  fun b(thing) { thing[1] }
+  fun with_a(thing, newB) { {...thing, 1: newB} }
+
+  %% etc
+}
+</code></pre>
+<p>This made sense to our programmer. What else could be changed from how the code
+was written in this new language to leverage whatever information the compiler
+was already giving?</p>
+<p>A dismissive voice across the room joined the conversation without a lot of
+interest. There seems to always be at least one of these. &quot;Pff, that's just
+creating your own shitty classes again&quot;.</p>
+<p>&quot;Sort of&quot;, rebutted our protagonist, &quot;except then we would control the internal
+structure, and nobody could accidentally rely on it without like clearly
+breaking through that barrier of abstraction!</p>
+<p>Classes would look like regular objects to everyone else, and they'd invite the
+coupling.</p>
+<p>We could do this for every piece of data we work with, just one tiny module,
+you know, and it could even do the minimum validation we need to make sure the
+data is good, which would save other layers of the code from having...to double
+check...these things...&quot;</p>
+<p>Something clicked in our programmers heads.</p>
+<p>The rest of the team turned towards the discussion, curious and inquisitive, as
+the programmer started sketching onto a whiteboard squares and arrows,
+illustrating the problems they were having, explaining why this kind of
+abstraction made sense when working with a different language and how it solves
+the problems they have right now while allowing them to build systems that are
+more explicitly and intentionally coupled than the accidental spaghetti of data
+the project seemed to evolve into.</p>
+<p>Question and answer flew back and forth and back again as the team brought code
+onto screens and debated the ugliness, effectiveness, efficiency, readability,
+maintainability, extensibility, and testability of the code that could be.</p>
+<p>And the team agreed to give it a shot.</p>
+<p>That was the moment our programmer realized, whatever the language to use at
+work, whatever the project that needs to be built, all they needed was a tool
+to complain about the way things were at every turn and show them how things
+could be fixed, how things could be better. A tool like the one they had
+learned with.</p>
+<p>From now on, they will always have their own <strong>imaginary compiler</strong>.</p>
+<blockquote>
+<p>
+Thanks to <a href="https://twitter.com/MalinMnnikk">Malin Männikkö</a> and <a href="https://twitter.com/xaviervia">Fernando Via Canel</a>
+for taking the time to review earlier drafts of this story.
+  </p>
+</blockquote>
+
+        </section>
+      </section>
+      <section class="center">
+        <section class="content">
+          <h4> Newsletter </h4>
+          <p>
+          Hello! Glad to see you made it this far. You can get this and more stuff
+          right in your inbox. Just punch your email in the form below and I'll
+          take care of the rest.
+          </p>
+          <form
+            action="https://buttondown.email/api/emails/embed-subscribe/abstractmachines"
+            method="post"
+            target="popupwindow"
+            onsubmit="window.open('https://buttondown.email/abstractmachines', 'popupwindow')"
+            class="buttondown"
+            >
+            <input type="email" name="email" placeholder="hello@example.com" id="bd-email">
+            <input type="hidden" value="1" name="embed"></input>
+            <input type="submit" value="Subscribe"></input>
+          </form>
+        </section>
+      </section>
+      <footer>
+        <section class="center content">
+          <div>
+            <a class="img" href="/" alt="Abstract Machines Home">
+              <img class="isotype tiny" src="/assets/Isotype_inverted.png" alt="Abstract Machines Logo"/>
+            </a>
+          </div>
+        </section>
+      </footer>
+    </div>
+    <script src="https://unpkg.com/prismjs@1.20.0/components/prism-core.min.js"></script>
+    <script src="https://unpkg.com/prismjs@1.20.0/plugins/autoloader/prism-autoloader.min.js"></script>
+  </body>
+</html>
