@@ -19,6 +19,7 @@
 a {
   color: inherit;
   text-decoration: none;
+  padding: 0.1rem;
   border-bottom: 1px dashed var(--primary-color);
 }
 
@@ -114,6 +115,7 @@ h2 {
   font-size: 1.7rem;
   font-weight: 700;
   letter-spacing: -0.5px;
+  padding: 0.2rem 0;
   border-bottom: 8px solid var(--accent-1);
 }
 
@@ -260,3 +262,8 @@ form.buttondown input[type=submit] {
   background-color: var(--primary-color);
   color: var(--secondary-color);
 }
+
+div.calendly-overlay div.calendly-popup {
+  max-height: 900px !important;
+}
+

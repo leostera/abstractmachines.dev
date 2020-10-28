@@ -3,6 +3,7 @@ h1 {
 }
 
 h3 {
+  font-size: 1.2rem;
   margin-top: 4rem;
 }
 
@@ -65,6 +66,12 @@ p + p {
 
 p + h2 {
   margin-top: 3rem;
+}
+
+p + h3 {
+  margin-top: 2rem;
+  border: 0;
+  margin-bottom: 1rem;
 }
 
 pre + p {
