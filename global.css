@@ -56,10 +56,15 @@ section#title {
 }
 
 section.content {
-  padding: 1rem 5rem;
+  padding: 0rem 5rem;
   width: 100%;
   max-width: 900px;
 }
+
+section:nth-child(1) section.content:nth-child(1) {
+  padding: 2rem 5rem;
+}
+
 
 section.center {
   align-items: center;
@@ -267,3 +272,6 @@ div.calendly-overlay div.calendly-popup {
   max-height: 900px !important;
 }
 
+a.schedule-chat {
+  border-bottom: 2px solid var(--accent-2);
+}
