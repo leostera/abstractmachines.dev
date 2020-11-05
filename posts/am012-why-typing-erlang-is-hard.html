@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+    <meta name="title" content="Abstract Machines | Why Typing Erlang is Hard: Standard Erlang">
+    <meta name="description" content="Abstract Machines makes tools to think clearly.">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Abstract Machines | Why Typing Erlang is Hard: Standard Erlang ">
+    <meta property="og:description" content="Abstract Machines makes tools to think clearly.">
+    <meta property="og:image" content="https://abstractmachines.dev/assets/socialmedia.png">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:title" content="Abstract Machines | Why Typing Erlang is Hard: Standard Erlang ">
+    <meta property="twitter:description" content="Abstract Machines makes tools to think clearly.">
+    <meta property="twitter:image" content="https://abstractmachines.dev/assets/socialmedia.png">
+
+    <title>Abstract Machines | Why Typing Erlang is Hard: Standard Erlang </title>
+
+    <link rel="preload" href="/global.css" as="style">
+    <link rel="preload" href="/posts/style.css" as="style">
+    <link rel="stylesheet" href="/global.css">
+    <link rel="stylesheet" href="/posts/style.css">
+
+    <link href="https://unpkg.com/prismjs@1.20.0/themes/prism.css" rel="stylesheet" />
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-65775908-6"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-65775908-6');
+    </script>
+  </head>
+  <body>
+    <div class="container">
+      <section class="center">
+        <section class="content">
+          <nav>
+            <a class="img" href="/" alt="Abstract Machines Home">
+              <div class="brand">
+                <img class="isotype super-tiny" src="/assets/Isotype_inverted.png" alt="Abstract Machines Logo"/>
+                <span>Abstract Machines</span>
+              </div>
+            </a>
+            <div>
+              <a class="icon" href="https://github.com/AbstractMachinesLab">
+                <img src="/assets/github.png" alt="Github Logo"/>
+              </a>
+            </div>
+          </nav>
+        </section>
+      </section>
+      <section class="center">
+        <section class="content">
+          <h2>AM012</h2>
+<h1>Why Typing Erlang is Hard: Standard Erlang</h1>
+<p>I heard before that Erlang and the BEAM did not pack a static type system
+because their creators <em>&quot;couldn't build it&quot;</em>.</p>
+<p>That is nonsense.</p>
+<p>While building a sophisticated, reliable and scalable type checker is
+absolutely not a walk in the park, building one that works is not that hard. So
+if it could have been done, it's likely that it would've been done, and it
+would've been hardened by the same process OTP was hardened and turned into
+what it is today: a reliability gold standard.</p>
+<p>So I decided to write an Erlang type-checker to really understand what is hard
+about typing Erlang.</p>
+<p>It hit me that there is a split in here, that is sometimes hard to notice and
+it makes a world of a difference. There is <strong>an Erlang language</strong>, called
+Standard Erlang, and there is <strong>an Erlang Runtime</strong>, the BEAM. Along the same
+lines as there is a Java language, and then there's the JVM.</p>
+<p>Typing these 2 layers is typing 2 entirely different beasts.</p>
+<p>Here I'll go over what I've learned takes to type the Standard Erlang, and what
+are the thorny parts. We'll cover the runtime bits on a following essay.</p>
+<p>First, lets scope what actually <em>is</em> Standard Erlang.</p>
+<h2>Standard Erlang</h2>
+<p>Erlang is a dynamically, strongly typed language. It includes just a little
+extra over your typical functional programming language. Overall isn't <a href="https://github.com/erlang/otp/blob/master/lib/stdlib/src/erl_parse.yrl">that big a language</a>.</p>
+<p>My eye-ball estimation is that it is about a 3rd of the size of OCaml, and
+about a 5th of the size of Java.</p>
+<p>Here's some Erlang:</p>
+<pre><code class="language-Erlang">-module(hello_world).
+
+-export([hi/1]).  % &lt;-- this a compiler annotation
+
+hi(noone) -&gt; sad;
+hi(Name) -&gt; &lt;&lt;&quot;Hello, &quot;, (Name)/binary, &quot;!&quot;&gt;&gt;.
+</code></pre>
+<p>An Erlang program consists of a number of <code>modules</code>, each module is just a file
+with a bunch of <code>functions</code> in it and a few <code>annotations</code> used to tell the
+compiler what's exported, who the module author is, what a function type is
+supposed to be, etc.</p>
+<p>There's quite a few things you can write in Erlang that are relatively common:</p>
+<ul>
+<li>literals like booleans, numbers or strings</li>
+<li>lists, maps, tuples, lambdas</li>
+<li>ifs, try/catch, case</li>
+<li>function calls and references</li>
+</ul>
+<p>And then there's a few things that aren't common at all:</p>
+<ul>
+<li>atoms, which are just constants</li>
+<li>receive expressions</li>
+<li>all sorts of pattern matching</li>
+<li>everything is done through recursion</li>
+</ul>
+<p>But in general, the language expressivity comes from being rather simple. Most
+problems are solved by making functions that call each other, most functions
+pattern match on exactly the data they need, loops are achieved through
+recursion, and we're done.</p>
+<p>Exceptions are very common, since failing to pattern match will result in an
+exception. For this the language supports the <code>catch</code>, and <code>try..catch..after</code>
+expressions, but it is highly unidiomatic to use them.</p>
+<p>The superb uptime through supervision that Erlang is known for is actually
+baked into the runtime, not the language. The language itself has no notion of
+processes, links, or sending messages. The only thing it does have is <em>receive</em>
+expressions for <em>consuming messages</em>.</p>
+<p>Armed with this understanding, lets dig into how we could type Erlang.</p>
+<h2>Typing the Erlang Language</h2>
+<p>Typing Standard Erlang has a few difficulties that primarily seem to arise from
+its dynamic nature as a language.</p>
+<p>There is a subset of the language that <em>is statically typeable</em>, and I will try
+to cover this in a follow up post, but today lets look at the entire language
+and how we could type the different parts:</p>
+<ol>
+<li>Functions on Untagged Unions</li>
+<li>Functions on Records</li>
+<li>Functions on Tagged Unions (Variants)</li>
+<li>Receive Expressions</li>
+<li>Dynamic Dispatch and <code>M:F(A)</code> syntax</li>
+</ol>
+<p>I believe that there are other parts of the language that are either
+straightforward or not particularly friendly to static analysis, but these are
+the ones I've found so far. I'll try to write and cover more in the future.</p>
+<h3>1. Functions on Untagged Unions</h3>
+<p>An Erlang value can have a single type but we expect that type to be known only
+at runtime. This means that both the input and returning types of a function
+are actually unknown <em>until</em> we run the function.</p>
+<p>So whenever you see a function like <code>hi/1</code> above, calling it could actually
+return a value of different types, depending on how the function was written.</p>
+<p>For example, calling <code>hi(noone)</code> returns the atom <code>sad</code>. Instead, calling <code>hi(&lt;&lt;&quot;Joe&quot;&gt;&gt;)</code> returns the string <code>&lt;&lt;&quot;Hello, Joe!&quot;&gt;&gt;</code>. The atom <code>sad</code> and the string have different types. Calling <code>hi(0)</code> will result in an exception.</p>
+<p>If we were to write down the type of this function we'd have to say something
+like:</p>
+<pre><code class="language-erlang">hi(atom(&quot;noone&quot;) | string) -&gt; atom(&quot;sad&quot;) | string
+</code></pre>
+<p>This is present in every other dynamic language: Lisp, Lua, Javascript, Python,
+Ruby, Smalltalk, you name it. To deal with this, Erlang has pattern-matching
+and guards.</p>
+<p>These 2 features help you narrow these inputs down to ones that you are
+absolutely certain how to handle.</p>
+<p>Writing a type-checker that deals with this is certainly possible, as it has
+been done before in tools like <a href="flow-type">Flow</a> and <a href="typescript">TypeScript</a>,
+but it certainly isn't obvious how to.</p>
+<p>To better understand how this can be dealt with, we need to talk about <a href="union-types">Union
+Types</a>.</p>
+<p><strong>Union types</strong> allow us to express that a value may belong to one of many
+different types at the same time. E.g, <code>1</code> is a <code>number</code>, but it is also a
+<code>(number | bool)</code>. In the same way, <code>true</code> is a <code>bool</code>, but it is also a
+<code>(number | bool)</code>.</p>
+<p>We read <code>(number | bool)</code> as &quot;number or bool&quot;.</p>
+<p>The key here is that the value itself doesn't have explicit information about
+which type from the union it actually belongs to, and we're bound to find this
+out through <em>refinements</em>.</p>
+<p>We can do these refinements in 2 ways through the use of guards and pattern
+matching.</p>
+<br />
+<p><strong>Through the use of guards</strong> we can refine the actual type of a value into a
+single type. For example:</p>
+<pre><code class="language-erlang">left_pad(A, B) when is_binary(A) -&gt; &lt;&lt;(A)/binary, (B)/binary&gt;&gt;;
+left_pad(A, B) when is_number(A) -&gt; left_pad(binary:copy(&lt;&lt;&quot; &quot;&gt;&gt;, A), B).
+</code></pre>
+<p>This function is has the following signature:</p>
+<pre><code class="language-erlang">left_pad( string | number, string ) -&gt; string
+</code></pre>
+<p>But it is thanks to the guards <code>is_binary/1</code> and <code>is_number/1</code> that we <em>refine</em>
+the type of the inputs to be just <code>string</code> or just <code>number</code>.</p>
+<p>This makes it possible to say that <code>binary:copy(&lt;&lt;&quot; &quot;&gt;&gt;, A)</code> is safe, because
+at that point we know that <code>is_number(A)</code> was true, and so <code>A</code>'s type has been
+refined from <code>string | number</code> to just <code>number</code>. Otherwise the guard would have
+been false.</p>
+<p>However, we can't use any function as a guard. We must use only built-in
+functions that already come with Erlang runtime.</p>
+<p>This makes it impossible to write arbitrary refinement logic, which makes the
+approach rather limited.</p>
+<br />
+<p><strong>Through pattern matching</strong> we can do something very similar, and establish
+our expectations of the values. For example:</p>
+<pre><code class="language-erlang">count(A=[_|_]) -&gt; count(A, 0).
+
+count([], C) -&gt; C;
+count([_|T]) -&gt; count(T, C+1).
+</code></pre>
+<p>In this case, we are guaranteed that if our function pattern matches, then <code>A</code>
+will be a list.</p>
+<p>We don't really know what the list elements are, but of course we can try and
+continue pattern matching and using guards until we refine it &quot;enough&quot;.</p>
+<p>These two approaches, while composable, have the unfortunate property that they
+don't generalize to all kinds of data. They should work well tho for: atoms,
+literals, and anything that there is a guard available for.</p>
+<p>Anything where our data is one of type <em>or</em> another, would fall into this
+category.</p>
+<p>Maps, tuples, and records can work with this, but it doesn't scale very well.
+You essentially have to add the new map/tuple/record name to the union every
+time you want it supported. Even if you need a single field out of them.</p>
+<p>In the next section we'll see a different approach for dealing with this data
+that scales much better.</p>
+<h3>2. Functions on Records</h3>
+<p>When working with functions that take as inputs many values packed into one, be
+it with records, maps, or tuples, we're faced with a different issue: we don't
+care what the input type is <em>as long as it has what we need in it</em>.</p>
+<p>For example, if we have two possible maps that share some things, both of them
+could be thought of as their own separate type, and these 2 types would have
+something in common.</p>
+<pre><code class="language-erlang">% this is type 'character'
+Character = #{ name =&gt; &quot;Alexander Hamilton&quot;, play =&gt; &quot;Hamilton&quot; }.
+
+% this is type 'performer'
+Performer = #{ name =&gt; &quot;Linn Manuel Miranda&quot; }.
+</code></pre>
+<p>Now if we make a function to get the name of a Performer:</p>
+<pre><code class="language-erlang">name(#{ name := Name }) -&gt; Name.
+</code></pre>
+<p>and we give it a type:</p>
+<pre><code class="language-erlang">name(performer) -&gt; string.
+</code></pre>
+<p>Would we expect this function to work on Characters?</p>
+<p>My answer is yes, since Characters also have a <code>name</code> fields.</p>
+<p>In fact, I'd say that it will work just fine for any map <em>as long as it has a
+name key</em>.</p>
+<p>So the type of our function isn't quite <code>(character | performer)</code>. It actually
+is &quot;Any map as long as it has a name key&quot;. I'll use this notation for that:
+<code>#{ name }</code></p>
+<pre><code class="language-erlang">name(#{ name : A }) -&gt; A
+</code></pre>
+<p>Some type-systems support this with Structural Subtyping, some others use Row
+Polymorphism. The main difference isn't obvious in this getter function, but
+becomes obvious in the next one, a setter:</p>
+<pre><code class="language-erlang">with_name(Name, M=#{ name := _ }) -&gt; M#{ name =&gt; Name }.
+</code></pre>
+<p><strong>The structural subtyping approach</strong> would say that whatever you put in, it is
+now known to only have a <code>name</code> key. So all your other keys have disappeared
+(to the eyes of the type-system) and if you want to recover them you have to do
+some sort of casting. This is due to a subtyping behavior called <em>subsumption</em>
+and its the way that TypeScript handles this.</p>
+<p><strong>The row polymorphic approach</strong> has no information loss, and instead carries
+around the rest of the fields that <code>M</code> had. This is how OCaml and PureScript
+handles this. In PureScript this works for record types and in OCaml this is
+implemented for the object-oriented system.</p>
+<p>Either one of this approaches extends to the case where we use <em>all of the
+fields</em> of the input tuple, record, or map.</p>
+<h3>3. Functions on Tagged Unions (Variants)</h3>
+<p>Whenever a function takes in a parameter, or returns a result that looks like
+this:</p>
+<pre><code class="language-erlang">{tag, Value}
+</code></pre>
+<p>We are in the presence of a <em>tagged union</em>, or <em>variant</em>.</p>
+<p>This is an easier thing to deal with than #1, because now we have more
+information to know what is the actual type of the value: the tag.</p>
+<p>For example, take this function that may or may not succeed:</p>
+<pre><code class="language-erlang">work(ok) -&gt; {ok, success};
+work(not_ok) -&gt; {error, &lt;&lt;&quot;something went wrong&quot;&gt;&gt;}.
+</code></pre>
+<p>We can tell that the signature of this function is going to be:</p>
+<pre><code class="language-erlang">work( atom(&quot;ok&quot;) | atom(&quot;not_ok&quot;) ) -&gt; { atom(&quot;ok&quot;), atom(&quot;success&quot;) }
+                                     | { atom(&quot;error&quot;), string } 
+</code></pre>
+<p>Which now has these constant values (<code>ok</code>, <code>error</code>) on the left side of the
+tuple, which we can use to further narrow down what the expected types should
+be.</p>
+<p>This is a well established pattern in the Erlang ecosystem, where most
+functions that can fail return this result tuples with either an <code>ok</code> or an
+<code>error</code> tag.</p>
+<p>To be fair, this still suffers from the problems of #1. We can make a function
+that returns an ok-tagged value that is an untagged union of types as well.</p>
+<pre><code class="language-erlang">work(ok) -&gt; {ok, go_on};
+work(done) -&gt; {ok, &lt;&lt;&quot;great job!&quot;&gt;&gt;};
+work(not_ok) -&gt; {error, &lt;&lt;&quot;something went wrong&quot;&gt;&gt;}.
+</code></pre>
+<p>The signature of this function would be:</p>
+<pre><code class="language-erlang">work(In) -&gt; { atom(&quot;ok&quot;), atom(&quot;go_on&quot;) | string }
+          | { atom(&quot;error&quot;), string } 
+</code></pre>
+<p>If you get an <code>{ok, Value}</code>, typing <code>Value</code> has the exact same issues we discussed above.</p>
+<p>However, this pattern helps us in typing things because we can always tag our
+data all the way down:</p>
+<pre><code class="language-erlang">work(ok) -&gt; {ok, go_on};
+work(done) -&gt; {ok, {message, &lt;&lt;&quot;great job!&quot;&gt;&gt;}};
+work(not_ok) -&gt; {error, &lt;&lt;&quot;something went wrong&quot;&gt;&gt;}.
+</code></pre>
+<p>Which is a little more verbose, but a lot more amenable to type-checking too,
+since the type-checker can associate a specific tag with a specific type.</p>
+<h3>4. Receive Expressions</h3>
+<p>There is an asymmetry in the language: at the language level we can only
+receive messages. There is no special constructs for sending messages. To send
+a message we just use the <code>erlang:send/2</code> function, or its operator version
+<code>!</code>.</p>
+<p>So in any function, when we encounter a <code>receive</code> expression we are really
+saying 2 things:</p>
+<ul>
+<li>
+<p>Here be <strong>side-inputs</strong> — this function will receive a value that is
+not a direct argument, and it can use it as if it was one.</p>
+</li>
+<li>
+<p>If there is a timeout (the <code>after</code> part), then there is also a <strong>deadline</strong>.
+Literally, since if this was a process, it'd be killed.</p>
+</li>
+</ul>
+<p>We won't bother too much with the deadline right now, but we'll look into these
+side-inputs we receive as messages. Here's an example of this expressions:</p>
+<pre><code class="language-erlang">adder() -&gt; receive {X, Y} -&gt; X + Y end.
+</code></pre>
+<p>We are very interested in the pattern matching that just happened up there,
+since that pattern matching essentially tells us what messages we can receive.</p>
+<p>So much so, that we could think of this <code>receive</code> expression as a function
+built into the language that we can call with a function of our own.</p>
+<pre><code class="language-erlang">adder() -&gt; receive      {X, Y}  -&gt; X + Y end .
+adder() -&gt; receive(fun ({X, Y}) -&gt; X + Y end).
+</code></pre>
+<p>And now we can analyze this internal function in the same ways we analyzed
+points 1, 2, and 3 above.</p>
+<p>This reframing of receive expressions was actually key for the type-checker I'm
+writing to be able to understand what messages a process could receive, if we
+used the <code>adder/0</code> to start it.</p>
+<p>So that's how we can work with these <code>receive</code> expressions.</p>
+<h3>5. Dynamic Dispatch and <code>M:F(A)</code> syntax</h3>
+<p>Another beast entirely is the dynamic parts of the language that allow us to
+make decisions at runtime about what code to run, through special syntax.</p>
+<p>Erlang supports specifying what module, and what function you want to call in
+that module, completely dynamically.</p>
+<pre><code class="language-erlang">M = hello.
+F = world.
+M:F() =:= hello:world().
+</code></pre>
+<p>But how can we tell what type will <code>M:F()</code> have here if we don't keep track of
+<em>exactly</em> what the value of <code>M</code> and <code>F</code> are?</p>
+<p>We'd have to <em>evaluate</em> <code>M</code> to pick up the actual module name, and evaluate <code>F</code>
+to know what function to look up, and then look up the actual type of the
+function.</p>
+<p>If <code>M</code> is anything slightly more complex than just a variable binding like in
+the example above, we may just not be able to know what it is. Imagine the
+following scenario:</p>
+<pre><code class="language-erlang">M = receive Name when is_atom(Name) -&gt; Name end.
+M:run().
+</code></pre>
+<p>We'd need to wait on <em>receiving a message</em> to know what module to look up. This
+just isn't plausible because we can't even tell who is sending the message, or
+whether a message will be sent at all.</p>
+<p>Of course Real World Erlang tends to rely on <code>behaviors</code> to ensure that certain
+types are there, so perhaps annotating what the expected module behavior is
+would help:</p>
+<pre><code class="language-erlang">M : runnable behavior = receive Name when is_atom(Name) -&gt; Name end.
+M:run().
+</code></pre>
+<p>This way we'd be able to analyze this and know what type <code>run</code> should have, or
+complain immediately that <code>run</code> isn't actually implemented in that behavior and
+thus can't be guaranteed to exist.</p>
+<p>Nonetheless this isn't a trivial thing to type-check.</p>
+<h2>What's next?</h2>
+<p>I hope these few things I managed to cover today give you an idea of what's the
+hard parts of typing the Erlang language. It is not impossible, in fact some
+parts are rather straightforward to type, but its definitely got some thorny
+bits that we should address with care.</p>
+<p>In the future I'll write more about typing the language, in particular parts
+like binary string pattern matching, and the runtime and its properties, such
+as hot-code reloading, figuring out process types, and how to check for
+type-safe message passing.</p>
+<p>Until then, <em>Let it crash!</em></p>
+<hr />
+<h3>References &amp; More Resources:</h3>
+<ul>
+<li><a href="https://erlang.org/doc/reference_manual/users_guide.html">Erlang Reference Manual</a></li>
+<li><a href="https://www.typescriptlang.org/docs/handbook/unions-and-intersections.html">Typescript Handbook: Unions and Intersections</a></li>
+<li><a href="http://caml.inria.fr/pub/papers/remy_vouillon-objective_ml-tapos98.pdf">Objective ML: An effective object-oriented extension to ML</a></li>
+<li><a href="https://brianmckenna.org/blog/row_polymorphism_isnt_subtyping">Brian McKenna's blog post &quot;Row Polymorphism Isn't Subtyping&quot;</a></li>
+<li><a href="https://news.ycombinator.com/item?id=13047934">A HackerNews answer by groovy2shoes on the thread of &quot;Typed, modular macros for OCaml&quot;</a></li>
+<li><a href="https://github.com/purescript/documentation/blob/master/language/Types.md#row-polymorphism">PureScript's Type Documentation</a></li>
+<li><a href="https://github.com/koka-lang/koka">Koka: Function Oriented Programming with Row Polymorphic Effect Types</a></li>
+<li><a href="https://dev.realworldocaml.org/objects.html">Real World OCaml: Objects</a></li>
+</ul>
+
+        </section>
+      </section>
+      <section class="center">
+        <section class="content center">
+          <h4> What's next?</h4>
+          <p>
+          Make sure to follow me on twitter to get them as soon as they're out.
+          </p>
+          <p>
+          <a href="https://twitter.com/leostera?ref_src=twsrc%5Etfw" class="twitter-follow-button" data-show-count="false">follow @leostera</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+          </p>
+        </section>
+      </section>
+      <footer>
+        <section class="center content">
+          <div>
+            <a class="img" href="/" alt="Abstract Machines Home">
+              <img class="isotype tiny" src="/assets/Isotype_inverted.png" alt="Abstract Machines Logo"/>
+            </a>
+          </div>
+        </section>
+      </footer>
+    </div>
+    <script src="https://unpkg.com/prismjs@1.20.0/components/prism-core.min.js"></script>
+    <script src="https://unpkg.com/prismjs@1.20.0/plugins/autoloader/prism-autoloader.min.js"></script>
+  </body>
+</html>
