@@ -69,7 +69,8 @@ if it could have been done, it's likely that it would've been done, and it
 would've been hardened by the same process OTP was hardened and turned into
 what it is today: a reliability gold standard.</p>
 <p>So I decided to write an Erlang type-checker to really understand what is hard
-about typing Erlang.</p>
+about typing Erlang. I know Dialyzer exists, and its great, I just wanted to
+understand from scratch.</p>
 <p>It hit me that there is a split in here, that is sometimes hard to notice and
 it makes a world of a difference. There is <strong>an Erlang language</strong>, called
 Standard Erlang, and there is <strong>an Erlang Runtime</strong>, the BEAM. Along the same
@@ -143,16 +144,17 @@ at runtime. This means that both the input and returning types of a function
 are actually unknown <em>until</em> we run the function.</p>
 <p>So whenever you see a function like <code>hi/1</code> above, calling it could actually
 return a value of different types, depending on how the function was written.</p>
-<p>For example, calling <code>hi(noone)</code> returns the atom <code>sad</code>. Instead, calling <code>hi(&lt;&lt;&quot;Joe&quot;&gt;&gt;)</code> returns the string <code>&lt;&lt;&quot;Hello, Joe!&quot;&gt;&gt;</code>. The atom <code>sad</code> and the string have different types. Calling <code>hi(0)</code> will result in an exception.</p>
+<p>For example, calling <code>hi(noone)</code> returns the atom <code>sad</code>. Instead, calling
+<code>hi(&lt;&lt;&quot;Joe&quot;&gt;&gt;)</code> returns the string <code>&lt;&lt;&quot;Hello, Joe!&quot;&gt;&gt;</code>. The atom <code>sad</code> and the
+string have different types. Calling <code>hi(0)</code> will result in an exception.</p>
 <p>If we were to write down the type of this function we'd have to say something
 like:</p>
 <pre><code class="language-erlang">hi(atom(&quot;noone&quot;) | string) -&gt; atom(&quot;sad&quot;) | string
 </code></pre>
 <p>This is present in every other dynamic language: Lisp, Lua, Javascript, Python,
-Ruby, Smalltalk, you name it. To deal with this, Erlang has pattern-matching
-and guards.</p>
-<p>These 2 features help you narrow these inputs down to ones that you are
-absolutely certain how to handle.</p>
+Ruby, Smalltalk, you name it.</p>
+<p>Erlang has 2 features to help you narrow these inputs down to ones that you are
+absolutely certain how to handle: pattern-matching and guards.</p>
 <p>Writing a type-checker that deals with this is certainly possible, as it has
 been done before in tools like <a href="flow-type">Flow</a> and <a href="typescript">TypeScript</a>,
 but it certainly isn't obvious how to.</p>
@@ -216,11 +218,11 @@ care what the input type is <em>as long as it has what we need in it</em>.</p>
 <p>For example, if we have two possible maps that share some things, both of them
 could be thought of as their own separate type, and these 2 types would have
 something in common.</p>
-<pre><code class="language-erlang">% this is type 'character'
+<pre><code class="language-erlang">% this has type 'character'
 Character = #{ name =&gt; &quot;Alexander Hamilton&quot;, play =&gt; &quot;Hamilton&quot; }.
 
-% this is type 'performer'
-Performer = #{ name =&gt; &quot;Linn Manuel Miranda&quot; }.
+% this has type 'performer'
+Performer = #{ name =&gt; &quot;Lin-Manuel Miranda&quot; }.
 </code></pre>
 <p>Now if we make a function to get the name of a Performer:</p>
 <pre><code class="language-erlang">name(#{ name := Name }) -&gt; Name.
@@ -231,10 +233,10 @@ Performer = #{ name =&gt; &quot;Linn Manuel Miranda&quot; }.
 <p>Would we expect this function to work on Characters?</p>
 <p>My answer is yes, since Characters also have a <code>name</code> fields.</p>
 <p>In fact, I'd say that it will work just fine for any map <em>as long as it has a
-name key</em>.</p>
+name key that is a string</em>.</p>
 <p>So the type of our function isn't quite <code>(character | performer)</code>. It actually
-is &quot;Any map as long as it has a name key&quot;. I'll use this notation for that:
-<code>#{ name }</code></p>
+is &quot;Any map as long as it has a name key that is a string&quot;. I'll use this
+notation for that: <code>#{ name }</code></p>
 <pre><code class="language-erlang">name(#{ name : A }) -&gt; A
 </code></pre>
 <p>Some type-systems support this with Structural Subtyping, some others use Row
@@ -362,17 +364,17 @@ complain immediately that <code>run</code> isn't actually implemented in that be
 thus can't be guaranteed to exist.</p>
 <p>Nonetheless this isn't a trivial thing to type-check.</p>
 <h2>What's next?</h2>
-<p>I hope these few things I managed to cover today give you an idea of what's the
-hard parts of typing the Erlang language. It is not impossible, in fact some
-parts are rather straightforward to type, but its definitely got some thorny
-bits that we should address with care.</p>
+<p>I hope these few things I managed to cover today give you an idea of what are
+the hard parts of typing the Erlang language. It is not impossible, in fact
+some parts are rather straightforward to type, but its definitely got some
+thorny bits that we should address with care.</p>
 <p>In the future I'll write more about typing the language, in particular parts
 like binary string pattern matching, and the runtime and its properties, such
 as hot-code reloading, figuring out process types, and how to check for
 type-safe message passing.</p>
 <p>Until then, <em>Let it crash!</em></p>
 <hr />
-<h3>References &amp; More Resources:</h3>
+<h3>References &amp; More Resources</h3>
 <ul>
 <li><a href="https://erlang.org/doc/reference_manual/users_guide.html">Erlang Reference Manual</a></li>
 <li><a href="https://www.typescriptlang.org/docs/handbook/unions-and-intersections.html">Typescript Handbook: Unions and Intersections</a></li>
@@ -383,6 +385,15 @@ type-safe message passing.</p>
 <li><a href="https://github.com/koka-lang/koka">Koka: Function Oriented Programming with Row Polymorphic Effect Types</a></li>
 <li><a href="https://dev.realworldocaml.org/objects.html">Real World OCaml: Objects</a></li>
 </ul>
+<blockquote>
+<p>
+  Thanks to
+  Manuel Rubio,
+  Malcolm Matalka,
+  and Calin Capitanu
+  for taking the time to review earlier drafts of this essay.
+</p>
+</blockquote>
 
         </section>
       </section>
