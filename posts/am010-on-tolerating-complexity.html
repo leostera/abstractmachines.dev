@@ -26,7 +26,7 @@
     <link rel="stylesheet" href="/global.css">
     <link rel="stylesheet" href="/posts/style.css">
 
-    <link href="https://unpkg.com/prismjs@1.20.0/themes/prism.css" rel="stylesheet" />
+    <link href="https://unpkg.com/prismjs@1.20.0/themes/prism-tomorrow.css" rel="stylesheet" />
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-65775908-6"></script>
     <script>
@@ -58,24 +58,24 @@
       </section>
       <section class="center">
         <section class="content">
-          <h2>AM010</h2>
-<h1>On Tolerating Complexity</h1>
+          <h2><a href="#am010" aria-hidden="true" class="anchor" id="am010"></a>AM010</h2>
+<h1><a href="#on-tolerating-complexity" aria-hidden="true" class="anchor" id="on-tolerating-complexity"></a>On Tolerating Complexity</h1>
 <p>It was late at night when I realized it was about to happen again.</p>
-<p>The existing publishing tools I had at hand weren't particularly good to
+<p>The existing publishing tools I had at hand weren’t particularly good to
 showcase what I had in mind, but they were convenient enough that I could just
 write and leave the problem of actually reading them to whoever happened to
 land on that blog.</p>
 <p>I mean, it was just a blog. Starting out with 8 patrons, the traffic it got was
 mostly friends. They could bear with it.</p>
-<p>But the unfortunate reality is that I can't quite stand watching something
+<p>But the unfortunate reality is that I can’t quite stand watching something
 being done poorly. It just broils in my gut the feeling that <em>we can do
 better</em>. Editing could be simpler. Publishing could be faster. Thinking could
 be easier.</p>
 <p>I will try to best it, even if the end result ends up being worse, and while
-I'll be the first to admit that perhaps it isn't the most attractive of
+I’ll be the first to admit that perhaps it isn’t the most attractive of
 qualities, it always teaches me something new. Every now and then I do
 manage to do it better. The world around me is a little better for it.</p>
-<p>This time I had to sit down and write something. I didn't quite know what yet,
+<p>This time I had to sit down and write something. I didn’t quite know what yet,
 but I knew that how I had been writing was getting in the way of what I wanted
 to write. So I took a step back and asked around how are the <em>cool kids</em> doing
 it this days.</p>
@@ -89,7 +89,7 @@ already in, so from the choices I was offered it looked like the winner was in
 fact Next.js. It came with a few interesting features that I dismissed as
 <a href="http://wiki.c2.com/?BellsWhistlesAndGongs">whistles &amp; bells</a>, and frowned at the requirement that
 my pages would have to be translated into React components.</p>
-<p>Surely a tool with such an emphasis on the &quot;Developer Experience&quot; would
+<p>Surely a tool with such an emphasis on the “Developer Experience” would
 consider the many formats my data could be in, and accommodate for it. But I
 nonetheless decided to translate an essay into some Javascript code, and I
 finally felt like I could start writing.</p>
@@ -107,9 +107,9 @@ many millions of lines of code from there down to the hardware it runs.
 <strong>Tolerance</strong> here is the key word. They afford me things. Not physical things
 like food, but the affordance that your thinking gains when you discover a new
 idea.</p>
-<p>When I first learned about <code>git</code> I suddenly had a new tool to think. I wasn't
+<p>When I first learned about <code>git</code> I suddenly had a new tool to think. I wasn’t
 familiar with branching models of Subversion or other versioning tools, but
-<code>git</code>'s branches, merges, and code history extended my thinking. I have a vague
+<code>git</code>’s branches, merges, and code history extended my thinking. I have a vague
 understanding of the internals of <code>git</code>, but I <strong>tolerate</strong> this complexity
 because of what it affords me.</p>
 <p>What was this tool really affording me with this complexity? I already had to
@@ -117,37 +117,37 @@ pay the cost of translating my content into the format it wanted of me, what
 else is there? Hot reloading of assets. Great. My assets are stylesheet files,
 the occasional image, and one or two embedded scripts. I can already refresh
 a browser with a keypress. What else is there?</p>
-<p>From the looks of it, this tools just doesn't support my use-case very well.
+<p>From the looks of it, this tools just doesn’t support my use-case very well.
 How can something so enormously popular and complicated as Next.js not support
 my so seemingly simple use-case? I had to be wrong. Where is all this
-complexity heading that I can't leverage it without bringing in even more of
+complexity heading that I can’t leverage it without bringing in even more of
 it?</p>
 <p>Some complexity exists because the underlying problem is in fact complex. It
 needs to be dealt with and it cannot be reduced any further. We tend to call
 this <a href="http://worrydream.com/refs/Brooks-NoSilverBullet.pdf"><em>Essential Complexity</em></a>. Did all the complexity
 in Next exist only to justify <strong>making me feel productive</strong>?</p>
 <p>I started wondering what really was so essentially complex about what I needed
-to do, but it didn't take long to put a list of the things that seemed the most
+to do, but it didn’t take long to put a list of the things that seemed the most
 independent from each other:</p>
 <ul>
-<li>I'd like my Markdown files to be compiled into their corresponding HTML
+<li>I’d like my Markdown files to be compiled into their corresponding HTML
 files, respecting their existing structure</li>
-<li>I'd like them to be optionally templated, to share some framing information</li>
-<li>I'd like to only do work that needs to be done</li>
-<li>I'd like my files to be served in a browser fast, and</li>
-<li>I'd like my files to be updated automatically in the browser</li>
+<li>I’d like them to be optionally templated, to share some framing information</li>
+<li>I’d like to only do work that needs to be done</li>
+<li>I’d like my files to be served in a browser fast, and</li>
+<li>I’d like my files to be updated automatically in the browser</li>
 </ul>
 <p>There were them. 5 requirements that this problem could be broken into.  It
-shouldn't take more than a couple of days to explore each one of them in enough
+shouldn’t take more than a couple of days to explore each one of them in enough
 depth to understand whether I was looking at massive Essential Complexity, or
 not.</p>
 <p>I decided to build this tool.</p>
-<h4>1. Compiling Markdown to HTML</h4>
+<h4><a href="#1-compiling-markdown-to-html" aria-hidden="true" class="anchor" id="1-compiling-markdown-to-html"></a>1. Compiling Markdown to HTML</h4>
 <p><a href="https://daringfireball.net/2004/03/introducing_markdown">Markdown</a> was introduced as a more humane way to write HTML. It has
 evolved from a rather moving target of inconsistent syntaxes into a series of
 standards, some describing a fairly complex format with plenty of features.</p>
-<p>To build a Markdown to HTML compiler I'd have to be clear about <em>which</em>
-Markdown format I'd be supporting. Since my content was currently written
+<p>To build a Markdown to HTML compiler I’d have to be clear about <em>which</em>
+Markdown format I’d be supporting. Since my content was currently written
 mostly following <a href="https://github.github.com/gfm">Github Flavored Markdown</a>, that
 seemed like the Markdown to target.</p>
 <p>Every compiler has a series of stages that take the initial source code, or a
@@ -200,19 +200,19 @@ fn html_to_string(html: HtmlNode) -&gt; String {}
 </code></pre>
 <p>It took me about an hour of reading the specification to realize that
 implementing a parser for the entire syntax would easily take me over a week,
-and I don't have that kind of time. It would likely be a very error prone
+and I don’t have that kind of time. It would likely be a very error prone
 process as well.</p>
 <p>A very fun thing to work on, for sure, but after understanding this specific
 problem better, I can <em>tolerate</em> the complexity of bringing in a 3rd party
 Markdown compiler into the table.</p>
-<h4>2. Templating</h4>
+<h4><a href="#2-templating" aria-hidden="true" class="anchor" id="2-templating"></a>2. Templating</h4>
 <p>Templating can take many shapes and forms. From full blown programming language
 support in the style of <a href="https://www.stuartellis.name/articles/erb">ERB (Embedded RuBy)</a>, to string
 matching and replacing in more mundane forms.</p>
 <p>Considering I do not need to perform any specific logic, my templating needs
 are closer to a string-matching followed by some splitting and joining.</p>
 <p>I have a <code>template.html</code> file that somewhere in the middle has a keyword that I
-want replaced with the actual content of the essay I'm writing.</p>
+want replaced with the actual content of the essay I’m writing.</p>
 <p>In pseudocode, this should be enough to achieve my goal:</p>
 <pre><code class="language-js">do_template(template, content) do
   [before, after] = template.split_at_word(&quot;$$document&quot;)
@@ -234,25 +234,25 @@ let compiled = template.replace(&quot;$$document&quot;, content);
 <p>For my use-case, the complexity of having an entire incrementally-rendering
 component framework like React, to reuse components across pages that would
 achieve the same effect, is simply <strong>not tolerable</strong>.</p>
-<h4>3. Only doing work that needs to be done</h4>
+<h4><a href="#3-only-doing-work-that-needs-to-be-done" aria-hidden="true" class="anchor" id="3-only-doing-work-that-needs-to-be-done"></a>3. Only doing work that needs to be done</h4>
 <p>A lot of the tools we work with do the same thing over and over again.
 Sometimes that is okay. Sometimes that is mandatory.</p>
-<p>For my use-case, because I'd like to keep the output of the compilation
+<p>For my use-case, because I’d like to keep the output of the compilation
 versioned, the compilation process should only redo the work that needs to be
 done.</p>
 <p>This has the side-benefit that recompiling these documents should be relatively
 fast, since I tend to work on a single document at a time. Occasionally a
 change in a template file would trigger only the recompilation of the documents
 using it, but that work is necessary.</p>
-<p>It is not &quot;fast enough that I do not mind having it done over and over again&quot;.
-It would yield a <em>broken artifact</em> if it wasn't done.</p>
+<p>It is not “fast enough that I do not mind having it done over and over again”.
+It would yield a <em>broken artifact</em> if it wasn’t done.</p>
 <p>So a hidden requirement here is that the build process should ensure that work
 that depends on each other is properly linked, and that if upstream work has to
 be redone, then dependent downstream work will be done again too.</p>
 <p>When we think of work and its dependencies, a very useful mental tool to put to
-use is <em>Graph Theory</em>. Now I'm no expert mathematician, but building a
+use is <em>Graph Theory</em>. Now I’m no expert mathematician, but building a
 tree-like data structure is something that we do in functional languages on a
-daily basis. Even if we don't define new ones ourselves, we have worked with
+daily basis. Even if we don’t define new ones ourselves, we have worked with
 inductive definitions of Lists, which can be thought of as Directed Acyclic
 Graphs where every node can have a single children.</p>
 <pre><code class="language-rust">enum BuildPlan {
@@ -289,25 +289,25 @@ all the information needed to carry it out in the future.</p>
 <p>It seems that because we are only working with files here, we can make use of
 the expected outputs to verify whether they are already where they should be
 and use this to avoid repeating that work.</p>
-<p>There has been plenty of work done by tools like <a href="https://bazel.build">Google's Bazel</a> in
+<p>There has been plenty of work done by tools like <a href="https://bazel.build">Google’s Bazel</a> in
 this space, which are phenomenal at handling distributed and parallel execution
 of massive compilation graphs across a variety of languages.</p>
 <p>Nonetheless, the essential complexity of the problem can be boiled down, for my
 use case, to a tree-traversal and some file-system operations. Bringing in an
 external graph library capable of more than that I would consider <strong>not
 tolerable</strong> in this case.</p>
-<h4>4. Serving files to a browser</h4>
+<h4><a href="#4-serving-files-to-a-browser" aria-hidden="true" class="anchor" id="4-serving-files-to-a-browser"></a>4. Serving files to a browser</h4>
 <p>Having built the bulk of the document compiler, I looked ahead at making this
 outputs available in a web browser.</p>
 <p>At the bottom of this stack, we would need to listen on a TCP socket that a
-browser could connect to, &quot;speak&quot; HTTP so we could understand what the browser
+browser could connect to, “speak” HTTP so we could understand what the browser
 is requesting, and have access to the file system to read, encode, and reply
 back to the browser with the appropriate HTTP responses.</p>
 <p>I already include the IP/TCP stack in the <em>tolerable</em> collection of things, but
-let's examine quickly why.  Reimplementing the TCP stack would require me to
-sit down and read through <a href="https://tools.ietf.org/html/rfc793">IETF's RFC 793</a>. I'm not sure I can make
-sense of everything that's described in that 80 page document, so I'd
-immediately say that this could possibly take me months of work. I don't have
+let’s examine quickly why.  Reimplementing the TCP stack would require me to
+sit down and read through <a href="https://tools.ietf.org/html/rfc793">IETF’s RFC 793</a>. I’m not sure I can make
+sense of everything that’s described in that 80 page document, so I’d
+immediately say that this could possibly take me months of work. I don’t have
 that kind of time.</p>
 <p>I chose then, sensibly, to reuse existing lower level primitives to open a TCP
 socket.</p>
@@ -317,7 +317,7 @@ for very similar reasons.  Reading and reimplementing either the original <a hre
 the first specification would take me weeks if not months of work.</p>
 <p>Lastly, there is the work of turning HTTP requests into specific actions
 against the file system, and putting together the appropriate responses. This
-shouldn't be that hard.</p>
+shouldn’t be that hard.</p>
 <pre><code class="language-rust">// pseudocode illustrating the idea
 fn handle_request(req: Request) -&gt; Response {
   let requested_path = req.path();
@@ -326,22 +326,22 @@ fn handle_request(req: Request) -&gt; Response {
   Response::ok(file_contents)
 }
 </code></pre>
-<p>If I can get my hands on some structure or object that represents the browser's
+<p>If I can get my hands on some structure or object that represents the browser’s
 request, I should be able to extract a few things, such as the <code>path</code>, and use
 that to construct the path to the actual underlying file.</p>
 <p>Reading a file is something most programming languages are already equipped to
-do, so that's done.</p>
+do, so that’s done.</p>
 <p>Next is putting together the appropriate response.</p>
 <p>The essential complexity of routing a request to a file in disk that I already
 know exists is mostly absorbed by the TCP and HTTP protocols, which I will not
 implement.</p>
 <p>The rest is manageable, and thus bringing in a 3rd party static file
 serving solution seems <strong>not tolerable</strong>.</p>
-<h4>5. Updating files in a browser automatically</h4>
+<h4><a href="#5-updating-files-in-a-browser-automatically" aria-hidden="true" class="anchor" id="5-updating-files-in-a-browser-automatically"></a>5. Updating files in a browser automatically</h4>
 <p>And there I was. I could build my documents, and I could serve them. But they
 were as static as things can be.</p>
-<p>I'd fire up <code>vim</code>, save a change. Recompile. Refresh. The iterative loop.</p>
-<p>I'm going to be frank here. That hot reloading is the closest the browser can
+<p>I’d fire up <code>vim</code>, save a change. Recompile. Refresh. The iterative loop.</p>
+<p>I’m going to be frank here. That hot reloading is the closest the browser can
 natively get to that feeling <a href="http://www.smalltalk.org">Smalltalk</a> gives you when you modify the actual
 running system.</p>
 <p><em>Where the source and the artifact meet, fuse, commune.</em></p>
@@ -389,10 +389,10 @@ with the amount of work that has to be done.</p>
   Response::ok(changed_files)
 }
 </code></pre>
-<p>Slightly naive, I'll grant you that, but considering the recompilation is
+<p>Slightly naive, I’ll grant you that, but considering the recompilation is
 already very efficient and it only happens as long as there is someone
-listening for changes I'd say its not that bad.</p>
-<p>On the browser side, however, I'd have to make this request to wait for changes
+listening for changes I’d say its not that bad.</p>
+<p>On the browser side, however, I’d have to make this request to wait for changes
 happen automatically, without any user intervention whatsoever. It would not
 make any sense for me to have to write some quirky live-reloading code
 side-by-side with my documents, so I needed to find a way of injecting a small
@@ -405,7 +405,7 @@ the <a href="https://html.spec.whatwg.org/">W3C HTML Specification</a>, and I do
 the complexity of bringing one in is <em>justified</em>.</p>
 <p>After this it all tied together fairly nicely, but the complexity involved in a
 3rd party hot reloader for my use case was just <strong>not tolerable</strong>.</p>
-<h4>Rinse and Repeat</h4>
+<h4><a href="#rinse-and-repeat" aria-hidden="true" class="anchor" id="rinse-and-repeat"></a>Rinse and Repeat</h4>
 <p>And so a week went and I had done what I feared: I spent an entire week writing
 a document builder instead of writing the actual documents.</p>
 <p><a href="https://github.com/AbstractMachinesLab/hotstuff"><em>hotstuff</em></a>, yet another document compiler, was fathomed into existence.</p>
@@ -413,11 +413,11 @@ a document builder instead of writing the actual documents.</p>
 reading RFCs, language specifications, and bashing my head at the
 implementation of the incredibly talented work of the authors of
 <a href="https://bazel.build">Bazel</a>, <a href="https://dune.build/">dune</a>, <a href="https://nextjs.org">Next.js</a>, <a href="https://tools.ietf.org/html/rfc793">TCP</a>,
-<a href="https://tools.ietf.org/html/rfc2616">HTTP</a>, and many others that I'll miss to mention, has actually made
+<a href="https://tools.ietf.org/html/rfc2616">HTTP</a>, and many others that I’ll miss to mention, has actually made
 the world even slightly better.</p>
-<p>I am unsure if anyone I know would've encouraged me to do it myself anyway. If
-you are reading this and you would've, reach out.</p>
-<p>What I am sure about is that I've learned more about what are the things that I
+<p>I am unsure if anyone I know would’ve encouraged me to do it myself anyway. If
+you are reading this and you would’ve, reach out.</p>
+<p>What I am sure about is that I’ve learned more about what are the things that I
 value in the tools that I use, and how they help me do work.</p>
 <p>I learned that I like better tools that afford me a lot with a reasonable
 investment, like how <code>git</code> gives me time-traveling powers for a few metaphors.</p>
@@ -428,11 +428,11 @@ that hot-reloading is a good way of bridging it in a browser.</p>
 <p>Most importantly, I learned that I value tools that help me think clearer, and
 that I think clearest when I understand why something is complex and can make
 voluntary decisions to tolerate certain complexity or to stand against it.</p>
-<p>And that's what software seems to need the most nowadays. Less flash and more
+<p>And that’s what software seems to need the most nowadays. Less flash and more
 understanding. Less bait and more questions.</p>
 <p><em>Tools to think clearly</em>.</p>
 <p>That seems to be the real hot stuff.</p>
-<h3>References</h3>
+<h3><a href="#references" aria-hidden="true" class="anchor" id="references"></a>References</h3>
 <ul>
 <li>Bazel <a href="https://bazel.build">[web]</a></li>
 <li>CC2 Entry on Whistles and Bells <a href="http://wiki.c2.com/?BellsWhistlesAndGongs">[wiki]</a></li>
@@ -440,14 +440,14 @@ understanding. Less bait and more questions.</p>
 <li>Flexible Pattern Matching in Strings <a href="https://users.dcc.uchile.cl/~gnavarro/FPMbook">[web]</a></li>
 <li>Gatsby <a href="https://gatsbyjs.com">[web]</a></li>
 <li>Github Flavored Markdown Spec <a href="https://github.github.com/gfm">[spec]</a></li>
-<li>Hugo, The World's Fastest Framework for Building Websites <a href="https://gohugo.io">[web]</a></li>
-<li>Hypertext Transfer Protocol -- HTTP/1.1 <a href="https://tools.ietf.org/html/rfc2616">[rfc]</a></li>
+<li>Hugo, The World’s Fastest Framework for Building Websites <a href="https://gohugo.io">[web]</a></li>
+<li>Hypertext Transfer Protocol – HTTP/1.1 <a href="https://tools.ietf.org/html/rfc2616">[rfc]</a></li>
 <li>Introducing Markdown <a href="https://daringfireball.net/2004/03/introducing_markdown">[blog]</a></li>
 <li>Next.js <a href="https://nextjs.org">[web]</a></li>
 <li>No Silver Bullet — Essence and Accident in Software engineering <a href="http://worrydream.com/refs/Brooks-NoSilverBullet.pdf">[pdf]</a></li>
 <li>Rust Language <a href="https://rust-lang.org">[web]</a></li>
 <li>Smalltalk <a href="http://www.smalltalk.org">[web]</a></li>
-<li>Stuart Ellis' Introduction to ERB Templating <a href="https://www.stuartellis.name/articles/erb">[blog]</a></li>
+<li>Stuart Ellis’ Introduction to ERB Templating <a href="https://www.stuartellis.name/articles/erb">[blog]</a></li>
 <li>Tranmission Control Protocol <a href="https://tools.ietf.org/html/rfc793">[rfc]</a></li>
 <li>WHATWG HTML Living Standard <a href="https://html.spec.whatwg.org/">[spec]</a></li>
 <li>WikiWikiWeb <a href="http://wiki.c2.com">[wiki]</a></li>

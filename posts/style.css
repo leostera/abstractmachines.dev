@@ -3,12 +3,20 @@ h1 {
 }
 
 h3 {
-  font-size: 1.2rem;
+  width: fit-content;
   margin-top: 4rem;
+  margin-bottom: 0;
+  font-size: 1.2rem;
+  font-weight: 700;
+  border-bottom: 8px solid #FC144F;
 }
 
 h4 {
   margin-top: 2.5rem;
+}
+
+h1 + *, h2 + *, h4 + *  {
+  margin-top: 0;
 }
 
 nav {
@@ -82,15 +90,13 @@ p + form {
 	margin-top: 1.5rem;
 }
 
+code {
+  padding: 0.2rem 0.3rem;
+  background-color: var(--tertiary-color);
+  border-radius: 5px;
+}
 
 pre code {
   border-radius: 2px;
-}
-
-h3 {
-  width: fit-content;
-  margin-bottom: 0;
-  font-weight: 700;
-  border-bottom: 8px solid #FC144F;
 }
 

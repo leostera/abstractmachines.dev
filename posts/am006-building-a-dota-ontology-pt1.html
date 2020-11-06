@@ -26,7 +26,7 @@
     <link rel="stylesheet" href="/global.css">
     <link rel="stylesheet" href="/posts/style.css">
 
-    <link href="https://unpkg.com/prismjs@1.20.0/themes/prism.css" rel="stylesheet" />
+    <link href="https://unpkg.com/prismjs@1.20.0/themes/prism-tomorrow.css" rel="stylesheet" />
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-65775908-6"></script>
     <script>
@@ -58,14 +58,14 @@
       </section>
       <section class="center">
         <section class="content">
-          <h2>AM006</h2>
-<h1>Building a Dota Ontology, Part 1: Introduction</h1>
+          <h2><a href="#am006" aria-hidden="true" class="anchor" id="am006"></a>AM006</h2>
+<h1><a href="#building-a-dota-ontology-part-1-introduction" aria-hidden="true" class="anchor" id="building-a-dota-ontology-part-1-introduction"></a>Building a Dota Ontology, Part 1: Introduction</h1>
 <blockquote>
-<h2>Disclaimer</h2>
+<h2><a href="#disclaimer" aria-hidden="true" class="anchor" id="disclaimer"></a>Disclaimer</h2>
 <p>I am not a professional Dota player, just a fan of the game. The knowledge
 presented here about it is not official knowledge about the game, and is a
 mix of my perception of it after ~1200 hours playing it and crowdsourced Dota
-2 wiki pages. Take it &quot;as is&quot;.</p>
+2 wiki pages. Take it “as is”.</p>
 </blockquote>
 <p>I recently got reacquainted with Protégé and decided to start a new ontology
 from scratch with the sole purpose of using it in a reasoning system written in
@@ -77,53 +77,53 @@ range of abilities and features.</p>
 bars, and move in all directions without any turns. And where players are
 divided in brackets of skills, called MMR.</p>
 <p>It gets pretty complex.</p>
-<p>One crucial process that I'd like some help with from a reasoning system is the
-process of building a team, also called &quot;drafting&quot;.</p>
-<p>Drafting usually involves a series of decisions based on &quot;synergies&quot; between
-characters, &quot;counter-picking&quot; (picking a character that for one reason or
-another is really good against a pick from the team), a player's experience
-with a character or a group of characters (such as &quot;ranged melee heroes&quot;
-or &quot;support nukers&quot;), and a good deal of <strong>meta</strong>.</p>
+<p>One crucial process that I’d like some help with from a reasoning system is the
+process of building a team, also called “drafting”.</p>
+<p>Drafting usually involves a series of decisions based on “synergies” between
+characters, “counter-picking” (picking a character that for one reason or
+another is really good against a pick from the team), a player’s experience
+with a character or a group of characters (such as “ranged melee heroes”
+or “support nukers”), and a good deal of <strong>meta</strong>.</p>
 <p><strong>Meta</strong> is the current gaps in the game balancing that appear after every
 update to the game. Normally very high rank players are at the edge of this and
 know how to exploit these unbalances to keep the game interesting to them. For
 most mortal players like me, the <strong>meta</strong> arrives when its already rebalanced
 in new patch, and we just believe we have the upper hand.</p>
 <p><strong>Synergy</strong> can be thought of as a compounding positive effect of two heroes
-playing together. We'll talk more about this in a minute.</p>
+playing together. We’ll talk more about this in a minute.</p>
 <p>The goal would be to get a decent answer to the question: for this particular
 team draft, what are suitable picks that make a counter-draft?</p>
 <p>The answer should be reached via automated reasoning instead of statistical
 methods (such as machine learning)</p>
 <hr />
-<p>In short, I'll be working through the definition of an ontology for the game,
+<p>In short, I’ll be working through the definition of an ontology for the game,
 its units, its mechanics, out of which the synergy between characters can be
 inferred.</p>
-<p>One example of this would be Pugna's synergy with Treant Protector.</p>
+<p>One example of this would be Pugna’s synergy with Treant Protector.</p>
 <p>Pugna has a unit-targeted, channeled, undispellable ability, Life Drain, that
 at level 1 transfers 150 health from the target to itself, effectively
 inflicting magical damage. It tethers Pugna to an enemy and essentially sucks
 the life out of them. The tether can be broken if the enemy runs away further
 than 900 range units from Pugna.</p>
-<p>Treant Protector has an ability that slows enemies down, Nature's Grasp, and an
+<p>Treant Protector has an ability that slows enemies down, Nature’s Grasp, and an
 ability that fully roots the entire enemy team into the ground.</p>
 <p>As a human, one can see why these 2 can have good synergy if they coordinate
-their spell casting so that Pugna's Life Drain happens as soon as Treat
+their spell casting so that Pugna’s Life Drain happens as soon as Treat
 Protector slows or roots an enemy target. The less an enemy moves, the more
 life will be drained.</p>
 <p>On the contrary, any character with abilities that can interrupt channeled
 spells could make a good counter-pick to Pugna. One example of this is
-Clockwerk, a strength based hero with a spell (affectionally called &quot;fart
-attack&quot;) that causes a stuttering stun to units near him. This is perfect to
+Clockwerk, a strength based hero with a spell (affectionally called “fart
+attack”) that causes a stuttering stun to units near him. This is perfect to
 counter any channeled abilities with low cooldown, as it will interrupt the
 channeling over and over again.</p>
-<p>So there's a few things to model here. Let's look a little closer at the parts
+<p>So there’s a few things to model here. Let’s look a little closer at the parts
 of Dota.</p>
 <hr />
 <p>Dota consists of a number of <em>Game Mechanics</em>, many of which have complex
 interactions with each other. These are meta-game elements that make up for
 <em>how the game works</em>. Changes in these mechanics alter the balance of the game
-and make a good deal of what the &quot;meta&quot; is about.</p>
+and make a good deal of what the “meta” is about.</p>
 <p>We can group them in:</p>
 <ol>
 <li>Unit Mechanics, or the properties used by controllable game units</li>
@@ -159,7 +159,7 @@ mentioned above.</p>
 <li>Shops, where items can be purchased</li>
 <li>Gold and Buyback, the currency used to buy items</li>
 <li>Items, with its rules for sharing, assembling, disassembling, and stacking</li>
-<li>Courier's and their placement in the world</li>
+<li>Courier’s and their placement in the world</li>
 <li>Runes of various kinds</li>
 <li>Vision over the map and the units</li>
 <li>Trees</li>
@@ -179,8 +179,8 @@ mentioned above.</p>
 <li>Initiating strategies</li>
 </ol>
 <p>As you can imagine by now, this will quickly become a pretty big ontology if I
-don't restrict myself to the specific use-case mentioned above. So I will start
-with 3 things that I'd as a human find useful in determining what is a good
+don’t restrict myself to the specific use-case mentioned above. So I will start
+with 3 things that I’d as a human find useful in determining what is a good
 draft:</p>
 <ol>
 <li>The Hero controllable unit and its basic attributes</li>
@@ -188,9 +188,9 @@ draft:</p>
 <li>The Drafting process and the order in which heroes are picked</li>
 </ol>
 <p>The core idea being to make the modeling of these 3 public in a repository,
-https://github.com/AbstractMachines/dota-ontology.</p>
+<a href="https://github.com/AbstractMachines/dota-ontology">https://github.com/AbstractMachines/dota-ontology</a>.</p>
 <p>This should keep us busy for a while.</p>
-<h3>References</h3>
+<h3><a href="#references" aria-hidden="true" class="anchor" id="references"></a>References</h3>
 <ul>
 <li>Dota 2 Gamepedia <a href="https://dota2.gamepedia.com/">[wiki]</a></li>
 </ul>

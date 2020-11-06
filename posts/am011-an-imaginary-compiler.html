@@ -26,7 +26,7 @@
     <link rel="stylesheet" href="/global.css">
     <link rel="stylesheet" href="/posts/style.css">
 
-    <link href="https://unpkg.com/prismjs@1.20.0/themes/prism.css" rel="stylesheet" />
+    <link href="https://unpkg.com/prismjs@1.20.0/themes/prism-tomorrow.css" rel="stylesheet" />
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-65775908-6"></script>
     <script>
@@ -58,84 +58,84 @@
       </section>
       <section class="center">
         <section class="content">
-          <h2>AM011</h2>
-<h1>An Imaginary Compiler</h1>
+          <h2><a href="#am011" aria-hidden="true" class="anchor" id="am011"></a>AM011</h2>
+<h1><a href="#an-imaginary-compiler" aria-hidden="true" class="anchor" id="an-imaginary-compiler"></a>An Imaginary Compiler</h1>
 <blockquote>
-<h2>Heads up!</h2>
+<h2><a href="#heads-up" aria-hidden="true" class="anchor" id="heads-up"></a>Heads up!</h2>
 <p>This is a short story exploring technical blogging as narrative non-fiction.
 It reads like a tale, and while it aims to entertain and be relatable, it
 attempts to expose a set of underlying technical points.</p>
 </blockquote>
 <p>A file somewhere feels its bits munged around, as our programmer saves it.</p>
-<p>&quot;ERROR!&quot;, yells the terminal output again. Eyes roll. What was it this time?
+<p>“ERROR!”, yells the terminal output again. Eyes roll. What was it this time?
 They wondered. Did I pass in the wrong variable? Was it the wrong property
 name?</p>
-<p>&quot;Silly me&quot;, mutters the programmer. It was indeed a typo. &quot;'email', not
-'emial'&quot;.</p>
+<p>“Silly me”, mutters the programmer. It was indeed a typo. “‘email’, not
+‘emial’”.</p>
 <p>You see, this programmer had been learning to code using an old <em>statically
 typed</em> language, so they were still not used to computers yelling out loud
-&quot;you're making mistakes&quot; this fast, this often, and often even showing how to
+“you’re making mistakes” this fast, this often, and often even showing how to
 fix the mistakes. But as programmers do, this one was picking up pace. Today a
 few lines, tomorrow a few modules.</p>
-<p>Quickly they learned that these things, &quot;types&quot;, don't <em>just</em> mix very well
-unless you're very explicit about it. That everything needs to have the right
-name. That sometimes you make modules that deal with a &quot;thing&quot;, and you hide
+<p>Quickly they learned that these things, “types”, don’t <em>just</em> mix very well
+unless you’re very explicit about it. That everything needs to have the right
+name. That sometimes you make modules that deal with a “thing”, and you hide
 what that thing is from everyone else.</p>
-<p>We say &quot;let everyone in on...&quot;, but we really mean that if some code was a
+<p>We say “let everyone in on…”, but we really mean that if some code was a
 person and some other was another person, these people would share some
 information.</p>
 <p>As time passed, our coder grew fond of this imaginary companion that would yell
 at them on every turn, letting them discover the wondrous world of computing
 through their fascinating, buggy programs.</p>
-<h4>First Job</h4>
+<h4><a href="#first-job" aria-hidden="true" class="anchor" id="first-job"></a>First Job</h4>
 <p>HR sent the email that morning, announcing our programmer they would be joining
 a new company! Excitement. On a team that used a modern <em>dynamically typed</em>
 language. Doubt.</p>
-<p>&quot;How is it possible&quot;, our protagonist wondered, &quot;that the compiler doesn't know
+<p>“How is it possible”, our protagonist wondered, “that the compiler doesn’t know
 what things are? Bytes flowing out of control throughout the controls of the
-program without anyone knowing what was what at any point in time? Madness&quot;</p>
+program without anyone knowing what was what at any point in time? Madness”</p>
 <p>Our programmer, you see, was used to defining what things were upfront. In this
 new project, there seemed to be no way to do this that was well accepted. In
-fact, this language seemed to have a split community of users that couldn't
+fact, this language seemed to have a split community of users that couldn’t
 even agree with each other on whether they liked this unstructured,
 metamorphing data in the first place!</p>
 <p>Some, bent to the will of the language, moved bytes in the hopes that they will
 be what they should, aggressively checking everywhere before using them.</p>
 <p>Others insisted in using something gimmick of the language that <em>looked like a
-type</em> but wasn't quite the same. It was a trick, played to give you the sense
+type</em> but wasn’t quite the same. It was a trick, played to give you the sense
 of security.</p>
 <p>And our programmer struggled to find their place in this world, without their
 imaginary companion showing them how it could be better.</p>
-<h4>Amalgamating</h4>
+<h4><a href="#amalgamating" aria-hidden="true" class="anchor" id="amalgamating"></a>Amalgamating</h4>
 <p>One, and then two tests printed yes. A third test goes red. Now the first one
-is broken. &quot;Ughhhh why is it so hard to refactor this f*cking thing&quot;, someone
+is broken. “Ughhhh why is it so hard to refactor this f*cking thing”, someone
 complained on the back.</p>
 <p>A chair turns around, and rolls over, offering help. It seems that someone
 changed the underlying structure of one of these objects, and while there was
 no tests that proved it was broken, production code was failing.</p>
-<p>&quot;I mean I get it, we're not making a class for this, since we are functional
-programmers or whatever but wouldn't it be nice if we had a single definition
-of what this thing looks like&quot;, argued the complainer pointing at a stacktrace.
+<p>“I mean I get it, we’re not making a class for this, since we are functional
+programmers or whatever but wouldn’t it be nice if we had a single definition
+of what this thing looks like”, argued the complainer pointing at a stacktrace.
 It was ridden with irrelevant details, but if you squinted, you maybe would
 find that they had tried to access some data that no longer resided inside of
-the object. &quot;I'd love it we could catch these things earlier on&quot;.</p>
+the object. “I’d love it we could catch these things earlier on”.</p>
 <p>Long ago our coder used to work with a companion that would complain very early
 on, very often, and very loudly. Long ago they used to write one module per
-&quot;thing&quot;, whatever that thing was. Sometimes creating a &quot;thing&quot; meant it must
-have passed certain requirements, so the rest of the code wouldn't need to
+“thing”, whatever that thing was. Sometimes creating a “thing” meant it must
+have passed certain requirements, so the rest of the code wouldn’t need to
 check for these things later on. But that was a long time ago.</p>
 <p>And our programmer, wondering why not just make a module for this thing,
 shared:</p>
-<p>&quot;I mean, sure, we don't quite have a compiler complaining at us on every new
-line we write, but I've noticed it does complain about <em>some things</em>...</p>
+<p>“I mean, sure, we don’t quite have a compiler complaining at us on every new
+line we write, but I’ve noticed it does complain about <em>some things</em>…</p>
 <p>So hear me out, what if we just make a new module with functions to both
-create, but also access and alter this thing.&quot;</p>
-<p>&quot;Ugh more code?&quot;, the complaining continued.</p>
-<p>&quot;Yeah so instead of just passing that data around, you would be forced to use
+create, but also access and alter this thing.”</p>
+<p>“Ugh more code?”, the complaining continued.</p>
+<p>“Yeah so instead of just passing that data around, you would be forced to use
 this module, and then if we need to change something like a name of one of its
 properties, then the function names will change and the compiler will complain
-about that. I mean it can't tell the property name has changed, but it can tell
-that the function name has, right?&quot;, our programmer proposed, sketching
+about that. I mean it can’t tell the property name has changed, but it can tell
+that the function name has, right?”, our programmer proposed, sketching
 pseudocode.</p>
 <pre><code class="language-erlang">module(OurThing) {
   %% fields: A, B, C
@@ -157,17 +157,17 @@ pseudocode.</p>
 was written in this new language to leverage whatever information the compiler
 was already giving?</p>
 <p>A dismissive voice across the room joined the conversation without a lot of
-interest. There seems to always be at least one of these. &quot;Pff, that's just
-creating your own shitty classes again&quot;.</p>
-<p>&quot;Sort of&quot;, rebutted our protagonist, &quot;except then we would control the internal
+interest. There seems to always be at least one of these. “Pff, that’s just
+creating your own shitty classes again”.</p>
+<p>“Sort of”, rebutted our protagonist, “except then we would control the internal
 structure, and nobody could accidentally rely on it without like clearly
 breaking through that barrier of abstraction!</p>
-<p>Classes would look like regular objects to everyone else, and they'd invite the
+<p>Classes would look like regular objects to everyone else, and they’d invite the
 coupling.</p>
 <p>We could do this for every piece of data we work with, just one tiny module,
 you know, and it could even do the minimum validation we need to make sure the
-data is good, which would save other layers of the code from having...to double
-check...these things...&quot;</p>
+data is good, which would save other layers of the code from having…to double
+check…these things…”</p>
 <p>Something clicked in our programmers heads.</p>
 <p>The rest of the team turned towards the discussion, curious and inquisitive, as
 the programmer started sketching onto a whiteboard squares and arrows,

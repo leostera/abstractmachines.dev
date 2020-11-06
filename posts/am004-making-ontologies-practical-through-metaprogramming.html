@@ -26,7 +26,7 @@
     <link rel="stylesheet" href="/global.css">
     <link rel="stylesheet" href="/posts/style.css">
 
-    <link href="https://unpkg.com/prismjs@1.20.0/themes/prism.css" rel="stylesheet" />
+    <link href="https://unpkg.com/prismjs@1.20.0/themes/prism-tomorrow.css" rel="stylesheet" />
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-65775908-6"></script>
     <script>
@@ -58,23 +58,23 @@
       </section>
       <section class="center">
         <section class="content">
-          <h2>AM004</h2>
-<h1>Making Ontologies Practical through Metaprogramming</h1>
+          <h2><a href="#am004" aria-hidden="true" class="anchor" id="am004"></a>AM004</h2>
+<h1><a href="#making-ontologies-practical-through-metaprogramming" aria-hidden="true" class="anchor" id="making-ontologies-practical-through-metaprogramming"></a>Making Ontologies Practical through Metaprogramming</h1>
 <p>It is clear that ontologies are useful for knowledge systems. They help us
 define, refine, and understand the domain we work with, the entities that
 compose it, their relationships and constraints in sort of cumbersome ways.</p>
 <p>The syntaxes for them are dreadful at best (XML) and completely foreign to most
-engineers out there at worst (Turtle). Independently of whether you're using
+engineers out there at worst (Turtle). Independently of whether you’re using
 RDF, RDF/Schema, OWL 1.0, OWL 2, or any of their profiles.</p>
 <p>Then you also have to consider the profiles. The subsets of them defined with
 certain computational properties. Some are good for reasoning, some are not.
-Which one to pick depends on your needs, and sometimes you don't really know
+Which one to pick depends on your needs, and sometimes you don’t really know
 that.</p>
-<p>If you are looking to get started, you'll find that most literature out there
+<p>If you are looking to get started, you’ll find that most literature out there
 is fairly dense. It is either a PhD thesis published by Springer, a
 specification of the semantics of an extension of RDF, or a few people that
 still dream of a Semantic Web. It is not a well trodden path, or at least it
-doesn't really have a good on-boarding experience. Either you're okay with the
+doesn’t really have a good on-boarding experience. Either you’re okay with the
 massive influx of information, or you hit the wall after downloading Protégé.</p>
 <p>During my experience at Spotify I got acquainted with OWL 2.0 and Turtle in a
 less than ideal but somehow much more manageable way. An ontology for the music
@@ -84,17 +84,17 @@ these concepts and ideas. I have been using them on several projects ever
 since.</p>
 <p>Today I want to focus on a couple of points that helped me take an Ontology to
 production successfully. The know-how needed to write an ontology from scratch
-is naturally different, and I'm bound to make an introduction to the subject at
+is naturally different, and I’m bound to make an introduction to the subject at
 some point.</p>
-<p>Nonetheless here's a rough primer:</p>
+<p>Nonetheless here’s a rough primer:</p>
 <ul>
 <li>Ontologies are descriptions of data</li>
 <li>There are Classes of Entities</li>
 <li>There are Relations between Entities</li>
 <li>It is written out in Triplets with a Subject, Predicate, and an Object</li>
 </ul>
-<p>For example, to be able to make sense of the following sentence: &quot;Alexander
-Hamilton has email alexander.hamilton@us.gov&quot;, we would need to model it
+<p>For example, to be able to make sense of the following sentence: “Alexander
+Hamilton has email <a href="mailto:alexander.hamilton@us.gov">alexander.hamilton@us.gov</a>”, we would need to model it
 somehow. Below here is the definition of the schema that allows us to talk
 about a Person as a Class, and of the Email field that every Person has.</p>
 <pre><code>@prefix rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt; .
@@ -108,31 +108,31 @@ hm:Email rdfs:range :Person.
 hm:Email rdfs:domain xsd:string.
 </code></pre>
 <p>The @prefix notation works exactly like an alias, so you can replace <code>hm</code> with
-<code>https://hamilton.com/ontology/</code> as you would expect. The middle bits &quot;a&quot;,
-&quot;rdfs:range&quot;, &quot;rdfs:domain&quot;, are all just pointers to other entities that we
+<code>https://hamilton.com/ontology/</code> as you would expect. The middle bits “a”,
+“rdfs:range”, “rdfs:domain”, are all just pointers to other entities that we
 have agreed mean something. So yes, this means we can literally come up with
 new relations and entities on the spot. Fathom them into existence from the
 void with a keystroke, and usher them away by removing all mentions to them.</p>
-<p>NOTE: When it comes to defining actual data in this formats, I haven't done
-much more than trying out sample datasets for well known ontologies. I've found
+<p>NOTE: When it comes to defining actual data in this formats, I haven’t done
+much more than trying out sample datasets for well known ontologies. I’ve found
 the tools for it got in the way of me getting my work done. Nonetheless, you
 can.</p>
 <p>The next question here is how to use this definition in your own code, because
 otherwise it is just a funky looking file in your repository doing nothing but
 haunt your colleagues. How can we use this ontology to constraint and guide the
 development?</p>
-<p>I've taken 2 paths, and to this day I'm happy at Doorling I took them in the
-order I'm presenting them here.</p>
+<p>I’ve taken 2 paths, and to this day I’m happy at Doorling I took them in the
+order I’m presenting them here.</p>
 <hr />
 <p>The first path is to write out code yourself that will deal with this data.
 Code that will encode all of the information represented in that schema and
 will give you all the guarantees that you can have from it.</p>
 <p>For example, if I was building a codebase in statically typed language, I would
 likely want to have types corresponding to these entities, properties, and
-perhaps even relationships. It wouldn't be too far off to think that every
-&quot;class&quot; corresponds to an actual Class in an OOP language, or one or more types
+perhaps even relationships. It wouldn’t be too far off to think that every
+“class” corresponds to an actual Class in an OOP language, or one or more types
 in a Functional language.</p>
-<p>Let's take this example and see what we could write for it in Reason, a newish
+<p>Let’s take this example and see what we could write for it in Reason, a newish
 syntax for OCaml:</p>
 <pre><code>module Person = {
   type t = {
@@ -146,9 +146,9 @@ Now we could write out</p>
 </code></pre>
 <p>You can write this out however you feel like, in whichever language you are
 working with, and you can make any interpretation of these rules you so wish.
-Ideally you'd limit yourself to just defining these tiny representations of
+Ideally you’d limit yourself to just defining these tiny representations of
 information that you can work with. Whether they are statically typed or not is
-really not important. Here's the same representation in unidiomatic functional
+really not important. Here’s the same representation in unidiomatic functional
 Javascript:</p>
 <pre><code>// file Person.js
 const FIELDS = Symbol(&quot;Person/Fields&quot;);
@@ -172,14 +172,14 @@ because it provided a good way to give extensibility to the main type
 specifications. This works particularly well when integrating data from
 different sources.</p>
 <p>Javascript does have support for first-class maps with string keys, so it
-could've been done there too.</p>
+could’ve been done there too.</p>
 <p>And then put these things to use. Use them for a few weeks, modify them, grow
 them, share them, scrap them, refactor them. Take notes of the changes you make
 and why. This code will be useful from day 1, since anyone relatively familiar
 with a programming language will be able to put together some representation of
 that data, but it will help you learn more about how to idiomatically handle
 this data in it too.</p>
-<p>Once you're comfortable and you see your patterns have been established,
+<p>Once you’re comfortable and you see your patterns have been established,
 consider taking the second path: metaprogramming.</p>
 <hr />
 <p>By the time you already know what your generated code should look you can take
@@ -189,7 +189,7 @@ language ecosystems will already have libraries to read up files and parse them
 to Turtle or RDF(S) data structures.</p>
 <p>The rest will really just be a relatively small command line interface that
 will read those Turtle files and spit out the code for your favorite language
-to interpret or compile would be enough for a while. It doesn't have to be very
+to interpret or compile would be enough for a while. It doesn’t have to be very
 smart either, it can just piece together string templates of your language and
 write them to files on disk.</p>
 <pre><code>ontology files =&gt; code generation =&gt; code
@@ -209,9 +209,9 @@ the first schema we saw into something like:</p>
 </code></pre>
 <p>Which should be considerably clearer to transform into a data structure that
 represents a Javascript program.</p>
-<p>That's it. That is really it. Just make sure you generate the code at compile
-time. There's enough uncertainty in software already to generate code on the
-fly that you can't easily inspect.</p>
+<p>That’s it. That is really it. Just make sure you generate the code at compile
+time. There’s enough uncertainty in software already to generate code on the
+fly that you can’t easily inspect.</p>
 
         </section>
       </section>
