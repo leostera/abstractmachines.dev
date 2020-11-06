@@ -178,8 +178,6 @@ like:</p>
 </code></pre>
 <p>This is present in every other dynamic language: Lisp, Lua, Javascript, Python,
 Ruby, Smalltalk, you name it.</p>
-<p>Erlang has 2 features to help you narrow these inputs down to ones that you are
-absolutely certain how to handle: pattern-matching and guards.</p>
 <p>Writing a type-checker that deals with this is certainly possible, as it has
 been done before in tools like <a href="flow-type">Flow</a> and <a href="typescript">TypeScript</a>,
 but it certainly isn’t obvious how to.</p>
@@ -212,7 +210,7 @@ at that point we know that <code>is_number(A)</code> was true, and so <code>A</c
 refined from <code>string | number</code> to just <code>number</code>. Otherwise the guard would have
 been false.</p>
 <p>However, we can’t use any function as a guard. We must use only built-in
-functions that already come with Erlang runtime.</p>
+functions that already come with the Erlang runtime.</p>
 <p>This makes it impossible to write arbitrary refinement logic, which makes the
 approach rather limited.</p>
 <br />
@@ -222,7 +220,7 @@ our expectations of the values. For example:</p>
 count(A=[_|_]) -&gt; count(A, 0).
 
 count([], C) -&gt; C;
-count([_|T]) -&gt; count(T, C+1).
+count([_|T], C) -&gt; count(T, C+1).
 </code></pre>
 <p>In this case, we are guaranteed that if our function pattern matches, then <code>A</code>
 will be a list.</p>
