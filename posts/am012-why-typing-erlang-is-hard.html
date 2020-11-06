@@ -94,7 +94,7 @@ lines as there is a Java language, and then there’s the JVM.</p>
 <p>We tend to speak of these 2 things as if they were one, but if we isolate the
 language from the runtime, we find that they exhibit very different behaviors.</p>
 <p>In particular the runtime brings to the table <em>distribution</em> and  <em>hot code
-reloading</em>, which makes typing things an distributed-systems problem. Fun, yes,
+reloading</em>, which makes typing things a distributed-systems problem. Fun, yes,
 but very impractical.</p>
 <p>On following essays I’ll do a more thorough and formal treatise of the
 operational semantics of the language and how to go about implementing your own
@@ -105,7 +105,9 @@ superficial way, and what are some thorny parts that we will encounter.</p>
 <p>First, lets scope what actually <em>is</em> Standard Erlang.</p>
 <h2><a href="#standard-erlang" aria-hidden="true" class="anchor" id="standard-erlang"></a>Standard Erlang</h2>
 <p>Erlang is a dynamically, strongly typed language. It includes just a little
-extra over your typical functional programming language. Overall isn’t <a href="https://github.com/erlang/otp/blob/master/lib/stdlib/src/erl_parse.yrl">that big a language</a>.</p>
+extra over your typical functional programming language. Overall, Erlang isn’t
+<a href="https://github.com/erlang/otp/blob/master/lib/stdlib/src/erl_parse.yrl">that big a
+language</a>.</p>
 <p>My eye-ball estimation is that it is about a 3rd of the size of OCaml, and
 about a 5th of the size of Java.</p>
 <p>Here’s some Erlang:</p>
@@ -135,10 +137,10 @@ supposed to be, etc.</p>
 <li>all sorts of pattern matching</li>
 <li>everything is done through recursion</li>
 </ul>
-<p>But in general, the language expressivity comes from being rather simple. Most
-problems are solved by making functions that call each other, most functions
-pattern match on exactly the data they need, loops are achieved through
-recursion, and we’re done.</p>
+<p>But in general, the language expressivity comes from it being rather simple.
+Most problems are solved by making functions that call each other, most
+functions pattern match on exactly the data they need, loops are achieved
+through recursion, and we’re done.</p>
 <p>Exceptions are very common, since failing to pattern match will result in an
 exception. For this the language supports the <code>catch</code>, and <code>try..catch..after</code>
 expressions, but it is highly unidiomatic to use them.</p>
@@ -313,7 +315,8 @@ work(not_ok) -&gt; {error, &lt;&lt;&quot;something went wrong&quot;&gt;&gt;}.
 work(In) -&gt; { atom(&quot;ok&quot;), atom(&quot;go_on&quot;) | string }
           | { atom(&quot;error&quot;), string } 
 </code></pre>
-<p>If you get an <code>{ok, Value}</code>, typing <code>Value</code> has the exact same issues we discussed above.</p>
+<p>If you get an <code>{ok, Value}</code>, typing <code>Value</code> has the exact same issues we
+discussed above.</p>
 <p>However, this pattern helps us in typing things because we can always tag our
 data all the way down:</p>
 <pre><code class="language-erlang">% same as last work function but with tags!
