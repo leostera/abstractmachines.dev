@@ -70,7 +70,7 @@
 <li><a href="#typing-the-erlang-language">Typing the Erlang Language</a>
 <ul>
 <li><a href="#1-functions-on-untagged-unions">Functions on Untagged Unions</a></li>
-<li><a href="#2-functions-on-records">Functions on Records</a></li>
+<li><a href="#2-functions-on-record-types">Functions on Record Types</a></li>
 <li><a href="#3-functions-on-tagged-unions-variants">Functions on Tagged Unions (Variants)</a></li>
 <li><a href="#4-receive-expressions">Receive Expressions</a></li>
 <li><a href="#5-dynamic-dispatch-and-mfa-syntax">Dynamic Dispatch and <code>M:F(A)</code> syntax</a></li>
@@ -236,7 +236,7 @@ You essentially have to add the new map/tuple/record name to the union every
 time you want it supported. Even if you need a single field out of them.</p>
 <p>In the next section we’ll see a different approach for dealing with this data
 that scales much better.</p>
-<h3><a href="#2-functions-on-records" aria-hidden="true" class="anchor" id="2-functions-on-records"></a>2. Functions on Records</h3>
+<h3><a href="#2-functions-on-record-types" aria-hidden="true" class="anchor" id="2-functions-on-record-types"></a>2. Functions on Record Types</h3>
 <p>When working with functions that take as inputs many values packed into one, be
 it with records, maps, or tuples, we’re faced with a different issue: we don’t
 care what the input type is <em>as long as it has what we need in it</em>.</p>
