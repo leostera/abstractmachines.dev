@@ -1,0 +1,231 @@
+@import url('https://fonts.googleapis.com/css2?family=Knewave&display=swap');
+
+:root {
+  --primary-color: #121212;
+  --secondary-color: #f8f8f8;
+  --tertiary-color: #e7e7e7;
+  --accent-1: #0c8996;
+  --accent-2: #FC144F;
+  --caramel: #D96704;
+}
+
+h1, h2, h3, h4 {
+  font-family: Inter, Helvetica Neue, -apple-system, sans-serif;
+}
+
+h1, h2 {
+  font-size: 3rem;
+  font-weight: 100;
+  letter-spacing: -2px;
+  line-height: 1.15;
+  margin: 0;
+}
+
+h1 span, h2 span {
+  font-weight: 900;
+  letter-spacing: -1px;
+}
+
+h3 {
+  font-size: 1.6rem;
+  font-weight: 900;
+  line-height: 1.15;
+  margin: 0;
+}
+
+h4 {
+  width: 100%;
+}
+
+a, a:visited {
+  color: var(--primary-color);
+  text-decoration: none;
+}
+
+@font-face {
+  font-family: 'Inter';
+  font-style:  normal;
+  font-weight: 100;
+  font-display: swap;
+  src: url("/assets/Inter-ExtraLight.woff2?v=3.13") format("woff2"),
+  url("/assets/Inter-ExtraLight.woff?v=3.13") format("woff");
+}
+
+@font-face {
+  font-family: 'Inter';
+  font-style:  normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/assets/Inter-Regular.woff2?v=3.13") format("woff2"),
+  url("/assets/Inter-Regular.woff?v=3.13") format("woff");
+}
+
+@font-face {
+  font-family: 'Inter';
+  font-style:  normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("/assets/Inter-Bold.woff2?v=3.13") format("woff2"),
+  url("/assets/Inter-Bold.woff?v=3.13") format("woff");
+}
+
+@font-face {
+  font-family: 'Inter';
+  font-style:  normal;
+  font-weight: 900;
+  font-display: swap;
+  src: url("/assets/Inter-Black.woff2?v=3.13") format("woff2"),
+  url("/assets/Inter-Black.woff?v=3.13") format("woff");
+}
+
+@font-face {
+  font-family: 'Exo 2';
+  font-style:  normal;
+  font-weight: 900;
+  font-display: swap;
+  src: url("./assets/exo.black.otf") format("otf");
+}
+
+a.caramel {
+  font-family: "Knewave", cursive;
+  color: var(--caramel) !important;
+  font-weight: 100;
+  font-size: 2rem;
+}
+
+.lam {
+  font-family: "Exo 2", sans-serif;
+  font-weight: 900;
+  font-size: 2rem;
+  letter-spacing: -3px;
+}
+
+.zap span {
+  font-weight: 100;
+}
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-family: Helvetica Neue, -apple-system, sans-serif;
+  font-weight: 300;
+  background-color: var(--secondary-color);
+  color: var(--primary-color);
+  font-size: 14pt;
+  line-height: 1.5;
+
+  display: flex;
+  flex-direction: column;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+img#logo {
+  max-width: 10rem;
+}
+
+section, article {
+  padding: 5rem 0;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+section#header {
+  min-height: 80vh;
+  justify-content: space-between;
+  padding: 2rem 1rem;
+}
+
+section#header div {
+  height: 80vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+section#projects, section#open-to-work {
+  color: var(--secondary-color);
+  background-color: var(--primary-color);
+  padding: 2rem 1rem;
+}
+
+section#projects {
+  min-height: 50vh;
+  padding-bottom: 5rem;
+}
+
+section#projects h2 + article {
+  margin-top: 5rem;
+}
+
+section#projects article {
+  padding: 2rem 1rem;
+  flex-direction: row;
+  flex-wrap: wrap;
+  min-width: 75vw;
+}
+
+section#projects article.coming-soon {
+  color: gray;
+}
+
+article img, article div.box {
+  margin: 0rem 0.7rem;
+  max-width: 120px;
+  min-width: 120px;
+}
+
+section#projects article div {
+  margin: 0rem 0.7rem;
+}
+
+section#projects article p {
+  margin: 0;
+}
+
+section#projects article h3 + p {
+  margin-top: 0.5rem;
+}
+
+
+section#projects article a, section#projects article a:visited {
+  color: var(--secondary-color);
+}
+
+section#get-in-touch {
+  min-height: 50vh;
+  padding: 5rem 1rem;
+}
+
+section#get-in-touch article, section#engagements article {
+  max-width: 700px;
+  padding: 0 1rem;
+}
+
+section#get-in-touch p {
+  width: 100%;
+}
+
+section#get-in-touch p:last-child {
+  width: fit-content;
+}
+
+section#get-in-touch a.link {
+  color: var(--secondary-color);
+  background: var(--primary-color);
+  font-weight: 900;
+  padding: 1rem 3rem;
+  margin: 2rem 1rem;
+}
+
+
+ul {
+  list-style-type: square;
+  padding-inline: 0.5rem;
+}

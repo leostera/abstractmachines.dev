@@ -276,3 +276,7 @@ div.calendly-overlay div.calendly-popup {
 a.schedule-chat {
   border-bottom: 2px solid var(--accent-2);
 }
+
+sup.footnote-ref a {
+  border-bottom: 0;
+}
