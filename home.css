@@ -7,6 +7,8 @@
   --accent-1: #0c8996;
   --accent-2: #FC144F;
   --caramel: #D96704;
+  --zap: #ffdc64;
+  --lam: #a6b7d0;
 }
 
 h1, h2, h3, h4 {
@@ -26,6 +28,18 @@ h1 span, h2 span {
   letter-spacing: -1px;
 }
 
+h2 + h3 {
+  margin-top: 2rem;
+}
+
+* + h2 {
+  margin-top: 2rem;
+}
+
+ul + h3 {
+  margin-top: 1rem;
+}
+
 h3 {
   font-size: 1.6rem;
   font-weight: 900;
@@ -40,6 +54,7 @@ h4 {
 a, a:visited {
   color: var(--primary-color);
   text-decoration: none;
+  border-bottom: 1px dashed var(--primary-color);
 }
 
 @font-face {
@@ -100,10 +115,6 @@ a.caramel {
   letter-spacing: -3px;
 }
 
-.zap span {
-  font-weight: 100;
-}
-
 html,
 body {
   padding: 0;
@@ -136,13 +147,13 @@ section, article {
 }
 
 section#header {
-  min-height: 80vh;
+  min-height: 75vh;
   justify-content: space-between;
   padding: 2rem 1rem;
 }
 
 section#header div {
-  height: 80vh;
+  height: 75vh;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -168,7 +179,8 @@ section#projects article {
   padding: 2rem 1rem;
   flex-direction: row;
   flex-wrap: wrap;
-  min-width: 75vw;
+  width: 90vw;
+  max-width: 900px;
 }
 
 section#projects article.coming-soon {
@@ -177,8 +189,8 @@ section#projects article.coming-soon {
 
 article img, article div.box {
   margin: 0rem 0.7rem;
-  max-width: 120px;
-  min-width: 120px;
+  max-width: 100px;
+  min-width: 100px;
 }
 
 section#projects article div {
@@ -228,4 +240,24 @@ section#get-in-touch a.link {
 ul {
   list-style-type: square;
   padding-inline: 0.5rem;
+}
+
+.zap span {
+  font-weight: 100;
+}
+
+section#projects article a.zap {
+  color: var(--zap);
+}
+
+a.zap img {
+  max-height: 80px;
+}
+
+section#projects article a.lam {
+  color: var(--lam);
+}
+
+a.lam-logo img {
+  max-height: 90px;
 }
