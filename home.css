@@ -138,8 +138,11 @@ img#logo {
   max-width: 10rem;
 }
 
+section {
+  padding: 5rem 1rem;
+}
+
 section, article {
-  padding: 5rem 0;
 
   display: flex;
   flex-direction: column;
