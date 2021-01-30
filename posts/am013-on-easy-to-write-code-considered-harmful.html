@@ -62,129 +62,120 @@
       </section>
       <section class="center">
         <section class="content">
-          <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+          <script src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 <h2><a href="#am013" aria-hidden="true" class="anchor" id="am013"></a>AM013</h2>
 <h1><a href="#easy-to-write-code-considered-harmful" aria-hidden="true" class="anchor" id="easy-to-write-code-considered-harmful"></a>Easy-to-Write Code Considered Harmful</h1>
 <p>Ever wondered why some old projects from former employees are so damn hard to
 read and maintain?</p>
-<p>I’d like to argue that the original authors are not super-humans or 10x coders,
-but that they had built an implicit context that they carried around in their
-heads when they were writing that code.</p>
-<p>To them, writing that code was easy because they relied on this implicit context.</p>
-<p>And that only means that you had to pay the cost of reconstructing that context
-from the fragments they left in the codebase every time you tried to work on
-it.</p>
-<blockquote>
-<p><strong>NOTE</strong>: I said “Easy to Write” but I really wanted to say
-“Write-optimized”.  Unfortunately “Write-optimized” is also used to mean that
-something is meant to process data in a way that makes writing it somewhere
-as fast as possible.</p>
-</blockquote>
+<p>I’d like to argue that the original authors carried around an <strong>implicit
+context</strong> that was not made explicit in their work.</p>
+<p>This implicit context is spread around in all the tiny decisions that aren’t
+entirely obvious in the code:</p>
+<ul>
+<li>undocumented magic numbers</li>
+<li>emerging patterns without guidelines</li>
+<li>default values without a hint of the reasoning behind them</li>
+<li>code that doesn’t immediately tell you where it comes from or goes to</li>
+</ul>
+<p>We find it hard to work on these codebases because we have to pay the cost of
+reconstructing that context from these fragments every time we engage with it.</p>
+<p>Since all code relies on some <strong>implicit context</strong>, the trick is to make the
+bulk of that context explicit.</p>
 <hr />
+<h2><a href="#example-react-hooks-and-destructuring-imports" aria-hidden="true" class="anchor" id="example-react-hooks-and-destructuring-imports"></a>Example: React Hooks and Destructuring Imports</h2>
 <p>Roy Derks recently posted on Twitter a question.</p>
 <br />
 <blockquote class="twitter-tweet"><p lang="en" dir="ltr">What do you prefer?<br><br>import { useState } from &#39;react&#39;<br><br>OR<br><br>import React from &#39;react&#39;<br><br>React.useState()</p>&mdash; Roy Derks (@gethackteam) <a href="https://twitter.com/gethackteam/status/1355216426622136328?ref_src=twsrc%5Etfw">January 29, 2021</a></blockquote> 
 <br />
-<p>From the answers, I saw people mostly pointing out 4 things:</p>
-<ol>
-<li>~36 said they’d go for the first approach, some argued it is more
-idiomatic or better supported by React, or allows tree-shaking</li>
-<li>about 6 trolled about using Vue instead or “mixing it up”</li>
-<li>1 said it’s a useless debate, since its all the same after transpilation</li>
-<li>the rest said they’d prefer the second approach</li>
-</ol>
-<p>This suggests that a larger number of people are more likely to import symbols
-from a module and detach them from their origin.</p>
+<p>From the answers, most people said they’d import symbols with destructuring
+imports in Javascript. This is a rather small concern, but everything adds to
+making a particular system easier or harder to work with. Imports are no
+exception.</p>
 <p>This can be less cognitive overhead <em>while you are writing it</em>, because most of
 what you need to remember is in your working memory already.</p>
-<p>When you just wrote the <code>useState</code> import, calling <code>useState(0)</code> will be dead obvious.</p>
+<p>When you just wrote the <code>{ useState }</code> import, calling <code>useState(0)</code> will be
+dead obvious.</p>
 <p>But what happens when your working memory is cleared?</p>
 <p>The cost of mapping imported symbols to specific modules is paid every time
 someone reads the code.</p>
-<p>As the complexity of your codebase increases, because it will, you’ll pay more
-and more time every time you try to read the code.</p>
+<p>As the complexity of your codebase increases you’ll pay more and more time
+every time you try to read the code.</p>
 <h3><a href="#react-hooks" aria-hidden="true" class="anchor" id="react-hooks"></a>React Hooks</h3>
 <p>Let’s look at a piece of React code with hooks:</p>
-<pre><code class="language-js">// some React component
-const [enabled, setEnabled, unsetEnabled] = useState(false);
-const [{first,second}, {setFirst,setSecond}] = useState2(0, 0);
+<pre><code class="language-js">// file: module.js
+import { useState } from 'react';
+// ...several hundred lines of JS...
+
+// some React component
+const [enabled, setEnabled, resetEnabled] = useState(false);
 </code></pre>
 <p>It is impossible to know from this whether someone is misusing <code>React.useState</code>
 or if we are using <code>CustomHooks.useState</code>. I’m forced to go to the top of the
 module every time I want to see where this function is actually coming from.</p>
 <p>The alternative would’ve been to write out:</p>
-<pre><code class="language-js">// some React component
-const [enabled, setEnabled, unsetEnabled] = React.useState(false);
-const [{first,second}, {setFirst,setSecond}] = CustomHooks.useState2(0, 0);
+<pre><code class="language-js">// file: module.js
+import React from 'react';
+// ...several hundred lines of JS...
+
+// some React component
+const [enabled, setEnabled, resetEnabled] = React.useState(false);
+// or 
+const [enabled, setEnabled, resetEnabled] = CustomHooks.useState(false);
 </code></pre>
-<p>Writing out the module name helps us see that we’re in fact using this wrong.</p>
+<p>Writing out the module name helps us see that we’re in fact using the function
+wrong.</p>
 <p>And the next time anyone reads this code they’ll immediately know where names
 are coming from.</p>
-<p>This is what you’d call <em>read-optimized code</em>, or “Easy-to-Read” code.</p>
-<p>You’re meant to pay a little more when you write it, so reading it is cheapest.</p>
-<h2><a href="#elixir-aliases" aria-hidden="true" class="anchor" id="elixir-aliases"></a>Elixir Aliases</h2>
-<p>In the Elixir community is very common to import, require, or alias modules and
-functions from different modules to preserve a general sense of aesthetics.</p>
-<p>When you are writing the code, and you are up and running with
-<code>Ecto.Changeset</code>, functions like <code>traverse_errors/2</code> are at the tip of your
-fingers, so you bring them into scope.</p>
-<p>That module you wanted to use, from some of your application-specific “context
-modules”, also should be aliased.</p>
-<p>Reading <code>MyApp.MyContext.MyMod</code> over and over is just repeating you what you
-already know.</p>
-<p>Here again, the cost of mapping imported symbols to specific aliases is paid
-every time someone reads the code.</p>
-<h2><a href="#implicit-context" aria-hidden="true" class="anchor" id="implicit-context"></a>Implicit Context</h2>
-<p>Most code that we write <em>because it’s easier</em> is likely relying on a lot of
-<strong>implicit context</strong>. This context could be domain knowledge, framework
-specific knowledge, or just whatever we happen to have in working memory as
-we’re writing it.</p>
-<p>Most of the time, this is harmful in the long term.</p>
-<p><em>Easy-to-Write code</em> is code that will be <em>slow to read</em> without that
-<strong>implicit context</strong>.</p>
-<p>And that context will need some effort to be built up again!</p>
-<p>Who doesn’t have that context and needs to pay the cost of building it
-up? Let’s see:</p>
+<p>This is what you’d call “Easy to Read” code.</p>
+<p>Code that was written paying a little more upfront, so reading it is cheaper.</p>
+<h2><a href="#the-cost-of-rebuilding-implicit-context" aria-hidden="true" class="anchor" id="the-cost-of-rebuilding-implicit-context"></a>The Cost of Rebuilding Implicit Context</h2>
+<p><em>Easy to Write code</em> is code that will be <em>slow to read</em> without that
+<strong>implicit context</strong>. And that context will absolutely need some effort to be
+built up again!</p>
+<p>How much effort will depend on how much energy is spent in making it easier
+later for other people to rebuild it.</p>
+<p>Think of:</p>
 <ul>
-<li>New employees</li>
-<li>Current employees that didn’t write this code</li>
-<li>You, a week from then if you had to switch tasks</li>
+<li>New employees – anyone being onboarded to your codebase and team</li>
+<li>Current employees that didn’t write this code – your peers that have to review your code</li>
+<li>You – a week from today, when it breaks in production</li>
+</ul>
+<p>And consider the cost of things like:</p>
+<ul>
+<li>
+<p>A default value without a good domain-specific comment explaining it means
+that someone will have to talk to your Product Owner to understand it. Let’s
+hope the new Product Owner also understood it the same way.</p>
+</li>
+<li>
+<p>A new idiomatic pattern will likely need a link to the documentation that
+explains it. Depending on your team, some people will ask you to rewrite this
+in an already established pattern instead, or they’ll have to get familiar
+with it to work on your code.</p>
+</li>
+<li>
+<p>Specific technical knowledge (an IETF RFC, library internals, etc) will likely
+take time to get familiar with. This may be justified, but pointing to the
+right resources will help.</p>
+</li>
 </ul>
 <p>So be kinder to your future self and whoever is going to maintain this.</p>
 <p>Pay the cost upfront. Write code that is <em>Easy-to-Read</em>.</p>
 <h2><a href="#ok-so-how-do-i-write-easy-to-read-code" aria-hidden="true" class="anchor" id="ok-so-how-do-i-write-easy-to-read-code"></a>Ok, so how do I write Easy-to-Read code?</h2>
 <p>It’s easier to read than to learn how to write it, but if you’re here you’re
 either already trying or willing to, so lets get down to it.</p>
-<p>First, <strong>identify why is this easy to write for you now</strong>:</p>
-<ul>
-<li>you are very familiar with the codebase – its an old project and you’ve been at it for a while</li>
-<li>you’ve worked with this domain for a while – its another project in FinTech, or another CMS</li>
-<li>you recently wrote similar code elsewhere – its a well understood pattern within your codebase or engineering niche</li>
-<li>you’ve used this tools for a while – you like this framework and have used it for years</li>
-</ul>
-<p>Then <strong>consider how would you write it if you didn’t have those reasons</strong>:</p>
-<ul>
-<li>If this was your first day with this codebase, would you do this?</li>
-<li>If you hadn’t worked in this domain, would you know this?</li>
-<li>If it had been a while since you last wrote similar code, would you remember this?</li>
-<li>If this was your first day with these tools, would this make sense to you?</li>
-</ul>
+<p>First, <strong>identify why some code is easy to write for you now</strong>.</p>
+<p>Then <strong>consider how would you write it if you didn’t have those reasons</strong>.</p>
 <p>Do this a few times and you will write code that is a lot more aware of the
 things it takes for granted.</p>
-<p>You and your peers will thank you for it.</p>
-<hr />
-<h3><a href="#one-last-thing" aria-hidden="true" class="anchor" id="one-last-thing"></a>One Last Thing</h3>
-<p>There is a lot more to be said about the Cognitive Overhead of Reading Code,
-and how we can pay it upfront to make it easier for others to onboard
-themselves into a codebase, and for everyone involved to maintain that code
-over time.</p>
-<p>For example, you shipping a feature this week instead of next week may seem
-like a great thing right now, but in perspective it could slow down a lot of
-people that try to maintain code that was Easy to Write for you.</p>
-<p>Be mindful. Code is a liability. Your job is to produce the least amount of it
-that brings the most value across a wide number of dimensions, and long-term
-maintainability is very likely one of them.</p>
-<p>Oh yeah, and leave an Easter-egg every now and then.</p>
+<p>Your future self and your peers will thank you for it.</p>
+<blockquote>
+<p><strong>One last thing</strong>: There is a lot more I’d like to say about the Cognitive
+Overhead of Reading Code, and how we can pay it upfront to make it easier for
+others to onboard new devs into a codebase, and really for everyone involved
+to maintain that code over time. But I’ll do that more systematically on
+another occasion.</p>
+</blockquote>
 
         </section>
       </section>
