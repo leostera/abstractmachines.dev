@@ -135,7 +135,8 @@ body {
 }
 
 img#logo {
-  max-width: 10rem;
+  max-width: 20rem;
+  padding: 1rem 0;
 }
 
 section {
@@ -150,13 +151,13 @@ section, article {
 }
 
 section#header {
-  min-height: 75vh;
-  justify-content: space-between;
+  min-height: 40vh;
+  justify-content: end;
   padding: 2rem 1rem;
 }
 
 section#header div {
-  height: 75vh;
+  height: 40vh;
   display: flex;
   flex-direction: column;
   align-items: center;
